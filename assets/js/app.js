@@ -14,7 +14,7 @@
       buy:      "#how",                    // -> DEX deep link at launch
       chart:    "#chart",                  // -> DexScreener at launch
       x:        "https://x.com/",          // official X (fill handle)
-      telegram: "https://t.me/",           // official Telegram (fill)
+      telegram: "https://t.me/trollcatt",   // official Telegram
       pad:      "https://robinlab.io"      // Robin Labs pad (launch home)
     },
     ticker: [
@@ -27,7 +27,8 @@
       "THE CHAIN IS GOLD · THE CAT IS BEIGE · THE VIBE IS ETERNAL",
       "YOU CANNOT OUT-TROLL THE TROLL CAT","STAY HYDRATED · STAY TROLLPILLED · PET THE CAT",
       "TRADE LESS · TROLL MORE · PET CAT","CONTRACT: TBA · IMPOSTORS: MANY · REAL CAT: ONE",
-      "NOT AN INVESTMENT · STILL SOMEHOW HERE"
+      "NOT AN INVESTMENT · STILL SOMEHOW HERE","NICE LEADERBOARD · BE A SHAME IF A JESTER WALKED IN",
+      "CATS LARPING AS FINANCE · ONE (1) CONFUSED DOG · AND US","THEY GOT THE CASH · WE GOT THE LAST LAUGH"
     ]
   };
   window.TROLL = CONFIG;

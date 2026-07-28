@@ -388,6 +388,10 @@ section{position:relative;padding:84px 0}
 .board-row.you{background:linear-gradient(90deg,rgba(57,255,20,.09),transparent);border-left:3px solid var(--green)}
 .board-row.you .rank{color:var(--green)}
 .board-row.you .who .tk{color:var(--green)}
+.board-row .verdict{display:inline-block;margin-top:9px;font-family:var(--mono);font-weight:700;font-size:.64rem;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--gold);background:rgba(244,196,48,.09);
+  border:1px solid rgba(244,196,48,.32);border-radius:6px;padding:3px 9px}
+.board-row.you .verdict{color:var(--green);background:rgba(57,255,20,.1);border-color:var(--line-strong)}
 .badge-new{display:inline-block;font-family:var(--mono);font-weight:700;font-size:.6rem;letter-spacing:.1em;color:#03130a;
   background:var(--green);border-radius:5px;padding:2px 7px;margin-left:8px;vertical-align:middle}
 .wall-note{margin-top:20px;font-family:var(--mono);font-size:.82rem;color:var(--gold);
