@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+# gm ser. the terminal stays green.

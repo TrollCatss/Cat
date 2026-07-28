@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" data-launched="0">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TROLL CAT ($TROLL) — Hold. Trade. Troll.</title>
+<meta name="description" content="A beige cat wearing the oldest grin on the internet, in a gold chain, living in a green terminal. $TROLL is a meme coin about a cat — no promises, all vibes. Not financial advice." />
+<link rel="canonical" href="https://trollcat.robinlab.io/" />
+
+<!-- open graph / twitter -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="TROLL CAT ($TROLL) — Hold. Trade. Troll." />
+<meta property="og:description" content="Beige cat. Green terminal. Gold chain. Zero explanation. A meme coin about a cat — no promises, all vibes." />
+<meta property="og:image" content="assets/img/og_banner.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="TROLL CAT ($TROLL)" />
+<meta name="twitter:description" content="You cannot out-troll the Troll Cat. Not financial advice, barely feline advice." />
+<meta name="twitter:image" content="assets/img/og_banner.png" />
+<meta name="theme-color" content="#070a07" />
+
+<!-- favicon -->
+<link rel="icon" type="image/png" href="assets/img/icon.png" />
+<link rel="apple-touch-icon" href="assets/img/icon.png" />
+
+<!-- fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="assets/css/styles.css" />
+<style>
+  /* launch-state conditional visibility + sound icon states */
+  [data-launched="0"] .when-live{display:none!important}
+  [data-launched="1"] .when-pre{display:none!important}
+  .sound .off{display:none}.sound .on{display:block}
+  .sound[data-on="0"] .on{display:none}.sound[data-on="0"] .off{display:block}
+</style>
+</head>
+<body data-boop-root>
+
+<!-- ============================ NAV ============================ -->
+<header class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top" aria-label="Troll Cat home">
+      <img src="assets/img/icon.png" alt="Troll Cat" width="38" height="38" />
+      <span>TROLL&nbsp;CAT<span class="tk">·$TROLL</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#about">what is this</a>
+      <a href="#trust">trust</a>
+      <a href="#how">how to pet</a>
+      <a href="#numbers">the numbers part</a>
+      <a href="#trollmap">trollmap</a>
+      <a href="#faq">faq</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="sound" data-on="0" title="toggle purr" aria-label="Toggle sound">
+      <svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
+      <svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><line x1="22" y1="9" x2="16" y2="15"/><line x1="16" y1="9" x2="22" y2="15"/></svg>
+    </button>
+    <a class="btn btn-gold pulse" data-link="buy" data-pet href="#how">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2a9 9 0 0 0-9 9c0 4 3 7 6 8 0-1 1-2 3-2s3 1 3 2c3-1 6-4 6-8a9 9 0 0 0-9-9zm-3 8a1.3 1.3 0 1 1 0 2.6A1.3 1.3 0 0 1 9 10zm6 0a1.3 1.3 0 1 1 0 2.6A1.3 1.3 0 0 1 15 10z"/></svg>
+      <span class="when-pre">get ready</span><span class="when-live">pet the cat</span>
+    </a>
+    <button class="burger" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+  </div>
+</header>
+
+<div id="top"></div>
+<!-- ========================== MARQUEE ========================== -->
+<div class="marquee" aria-hidden="true"><div class="track"></div></div>
+
+<!-- ============================ HERO =========================== -->
+<section class="hero" id="hero">
+  <canvas id="matrix"></canvas>
+  <div class="hero-in">
+    <div class="hero-copy">
+      <span class="chip gold" style="margin-bottom:18px"><span class="dot"></span>TROLL MODE: ON · PRE-LAUNCH</span>
+      <div class="wordmark"><span class="s">$</span>TROLL<span class="blink" style="color:var(--green)">_</span></div>
+      <h1>Beige Cat. Green Terminal. Gold Chain. Zero Explanation.</h1>
+      <p class="sub">A beige cat wearing the oldest grin on the internet. That's the pitch. That's the whole pitch. Trade less, troll more.</p>
+      <div class="cta">
+        <a class="btn btn-gold btn-lg pulse" data-link="buy" data-pet href="#how">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2a9 9 0 0 0-9 9c0 4 3 7 6 8 0-1 1-2 3-2s3 1 3 2c3-1 6-4 6-8a9 9 0 0 0-9-9zm-3 8a1.3 1.3 0 1 1 0 2.6A1.3 1.3 0 0 1 9 10zm6 0a1.3 1.3 0 1 1 0 2.6A1.3 1.3 0 0 1 15 10z"/></svg>
+          <span class="when-pre">get ready to pet</span><span class="when-live">pet the cat</span>
+        </a>
+        <a class="btn btn-ghost btn-lg" data-link="telegram" data-boop="240" href="#community">join the litter box</a>
+      </div>
+      <div class="early">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg>
+        The cat isn't live yet. When he is, you'll be earlier than everyone still reading think-pieces about him.
+      </div>
+
+      <span class="chip" style="margin:22px 0 8px">TROLL STATS // vibes, not a live feed</span>
+      <div class="stats">
+        <div class="st"><div class="k">Status</div><div class="v">PRE-LAUNCH</div><div class="note">cat not live yet</div></div>
+        <div class="st"><div class="k">Supply</div><div class="v" data-count="420.69" data-dec="2" data-suffix="B">0</div><div class="note">meme-numbered on purpose</div></div>
+        <div class="st"><div class="k">Tax (intent)</div><div class="v">0 / 0</div><div class="note">verify on-chain at launch</div></div>
+        <div class="st"><div class="k">Target cap</div><div class="v gold">$69.420B</div><div class="note">a bit, not a promise</div></div>
+      </div>
+
+      <div class="ca">
+        <span class="lbl">CA</span>
+        <span class="addr" data-ca-text>TBA — not live yet</span>
+        <button class="copy" data-copy-ca data-boop="300">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>copy
+        </button>
+      </div>
+      <p class="ca-warn"><b>No contract exists yet.</b> It gets posted right here at launch. Any $TROLL address circulating before then is a scam — the cat has one home, and this is it.</p>
+    </div>
+
+    <figure class="mascot">
+      <div class="glowring"></div>
+      <span class="badge a">gold chain: loaded</span>
+      <span class="badge b">grin: permanent</span>
+      <img src="assets/img/hero_scene.png" alt="Troll Cat — a beige cat with the trollface grin, wearing a gold $TROLL chain, sitting on stacks of cash in front of a green candlestick chart" width="460" height="575" fetchpriority="high" />
+    </figure>
+  </div>
+</section>
+
+<div class="marquee alt rev" aria-hidden="true"><div class="track"></div></div>
+
+<!-- =========================== ABOUT =========================== -->
+<section id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <figure class="about-art reveal">
+        <img src="assets/img/mascot.png" alt="Close-up of the Troll Cat grin with a gold $TROLL chain" width="560" height="560" loading="lazy" decoding="async" />
+        <figcaption>he's not smiling with you. he's smiling <em>at</em> you.</figcaption>
+      </figure>
+      <div class="lore reveal d1">
+        <span class="sec-tag">what is this</span>
+        <h2 style="font-size:clamp(1.9rem,4.4vw,2.8rem);text-transform:uppercase;margin:12px 0 16px">A cat. In a chain.<br>With a face that ruins timelines.</h2>
+        <p>The trollface has been ruining timelines since <b>2008</b>. Zero education required — you already have a relationship with that smirk. We slapped it on a beige cat, hung a gold chain on it, and put it on-chain. You're welcome. Or you're not. The cat doesn't check.</p>
+        <p><b>It has no intrinsic value — and that's the whole point.</b> Every "utility" token is a meme coin cosplaying as software with exit liquidity built in. $TROLL skips the costume: it openly admits it's a joke about a cat. Buying a coin that proudly declares itself worthless <em>is</em> the troll.</p>
+        <div class="pillars">
+          <div class="pillar"><h4>The oldest grin, now with whiskers</h4><p>Pre-loaded cultural equity you don't have to explain to anyone. Instant, wordless recognition.</p></div>
+          <div class="pillar"><h4>Trade less, troll more</h4><p>The cat's face never moves with the chart. Neither should yours. Go post the grin somewhere it doesn't belong.</p></div>
+          <div class="pillar"><h4>Us vs. the serious people</h4><p>Wagies refresh spreadsheets. Degens stay grinning. A flag to fly, not a coin to babysit.</p></div>
+          <div class="pillar"><h4>The community owns the cat</h4><p>No presale, no whale to dump on you, no team hoarding the bag. Everyone's early at the same block.</p></div>
+        </div>
+        <p class="note-line">Credit where it's due: the trollface was drawn by Carlos Ramírez ("Whynne") in 2008 — not Matt Furie's Pepe. We don't fake our lineage either.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== TRUST =========================== -->
+<section id="trust">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">troll --verify</span>
+      <h2>Trust the grin. Verify everything else.</h2>
+      <p>Honesty is the cheat code. Every claim below becomes a clickable on-chain fact at launch — or it comes off the page. A badge with no proof link is decoration, and the cat doesn't do decoration.</p>
+    </div>
+    <div class="terminal reveal d1">
+      <div class="term-bar"><span class="d d1"></span><span class="d d2"></span><span class="d d3"></span><span class="t">troll@terminal — verify.sh</span></div>
+      <div class="term-body">
+        <div class="cmd">troll --verify --stage=pre-launch</div>
+        <div class="trow"><span class="st scam">SCAM ALERT</span><span class="txt"><b>No contract exists yet.</b> Any $TROLL address you see circulating right now is fake. The real one publishes here at launch. The cat has not launched — impostors have.</span></div>
+        <div class="trow"><span class="st pending">PENDING</span><span class="txt"><b>Fair launch</b> — no presale, no VC, no insider allocation. Everyone in at the same block. <span class="when-live"><a data-link="chart" href="#">verify on-chain →</a></span></span></div>
+        <div class="trow"><span class="st pending">PENDING</span><span class="txt"><b>LP burned</b> to a dead address (stronger than a time-lock — the rug becomes physically impossible). Burn tx links here at launch.</span></div>
+        <div class="trow"><span class="st pending">PENDING</span><span class="txt"><b>Ownership renounced</b> to zero — no mint, no blacklist, no pause, no dev dials. We'll state plainly whether it's a plain token or upgradeable, because that's the part scammers hide.</span></div>
+        <div class="trow"><span class="st pending">PENDING</span><span class="txt"><b>0 / 0 tax</b> — readable straight from the verified contract the moment it exists. Not a badge you trust, a number you check.</span></div>
+        <div class="trow"><span class="st pending">PENDING</span><span class="txt"><b>Sellability</b> — a live honeypot check links here at launch so you can confirm you can actually get out, not just in.</span></div>
+        <div class="trust-foot">// honest limit: safe code is not a safe price. These reduce <b>technical</b> rug risk and do nothing about <b>market</b> risk — you can still lose 100%. The team is anonymous, and we say so plainly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== HOW TO BUY ======================= -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">how to pet the cat</span>
+      <h2>Four steps. Two minutes. One grin.</h2>
+      <p>Curious visitor in, holder out. Pre-launch the steps are here so you're ready the second the cat wakes up.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <svg class="paw" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2"/><circle cx="12" cy="8" r="2"/><circle cx="18" cy="10" r="2"/><circle cx="12" cy="15" r="3.4"/></svg>
+        <div class="n">1</div><h4>Get a wallet</h4>
+        <p>Download MetaMask or Phantom (whichever chain the cat lands on — announced at launch). Two minutes. The cat is patient. The cat has literally nothing else to do.</p>
+      </div>
+      <div class="step reveal d1">
+        <svg class="paw" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2"/><circle cx="12" cy="8" r="2"/><circle cx="18" cy="10" r="2"/><circle cx="12" cy="15" r="3.4"/></svg>
+        <div class="n">2</div><h4>Fund it</h4>
+        <p>Grab some ETH/SOL from any exchange and send it over. Bring only what you're genuinely okay turning into a funny story later. Grin money, not grocery money.</p>
+      </div>
+      <div class="step reveal d2">
+        <svg class="paw" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2"/><circle cx="12" cy="8" r="2"/><circle cx="18" cy="10" r="2"/><circle cx="12" cy="15" r="3.4"/></svg>
+        <div class="n">3</div><h4>Go to the DEX</h4>
+        <p>Connect your wallet and paste the <b>official</b> contract address — copied only from this site or our pinned socials. Any address you find before launch is a scam. The real cat has one home.</p>
+      </div>
+      <div class="step reveal d3">
+        <svg class="paw" viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="10" r="2"/><circle cx="12" cy="8" r="2"/><circle cx="18" cy="10" r="2"/><circle cx="12" cy="15" r="3.4"/></svg>
+        <div class="n">4</div><h4>Swap for $TROLL</h4>
+        <p>Trade, confirm, and congratulations — you're trollpilled. Now close the chart and go post the grin somewhere it doesn't belong.</p>
+      </div>
+    </div>
+    <div class="buy-cta reveal">
+      <a class="btn btn-gold btn-lg pulse" data-link="buy" data-pet href="#community">
+        <span class="when-pre">not live yet — get in the litter box</span><span class="when-live">pet the cat now</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="track"></div></div>
+
+<!-- ========================= TOKENOMICS ======================== -->
+<section id="numbers">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">the numbers part</span>
+      <h2>Yes there are numbers.</h2>
+      <p>Yes, they're on a picture of a cat. No, the cat did not do the math himself — he supervised.</p>
+    </div>
+    <div class="tok-grid">
+      <div class="tiles reveal">
+        <div class="tile"><div class="k">Total supply</div><div class="v"><span data-count="420.69" data-dec="2" data-suffix="B">0</span></div><div class="s">420,690,000,000 $TROLL — 420 and 69 are basically mandatory. Final figure confirmed at launch.</div></div>
+        <div class="tile"><div class="k">Buy / Sell tax</div><div class="v gold">0 / 0</div><div class="s">The intent: in and out clean, what you buy is what you hold. Verify from the contract at launch.</div></div>
+        <div class="tile"><div class="k">Liquidity (plan)</div><div class="v">BURNED</div><div class="s">Burned to a dead address at launch — stronger than a time-lock. Burn tx links here.</div></div>
+        <div class="tile"><div class="k">Ownership (plan)</div><div class="v">RENOUNCED</div><div class="s">To the zero address — no mint, no blacklist, no pause. Renounce tx links here.</div></div>
+        <div class="tile wide"><div class="k">The honest through-line</div><div class="s" style="font-size:.9rem;color:var(--ink-dim);margin-top:6px">On-chain safety features reduce <b style="color:var(--ink)">technical</b> rug risk and do nothing about <b style="color:var(--ink)">market</b> risk. Price can still go to zero — and the cat will stay beige about it. Every number here becomes a clickable on-chain fact at launch, or it comes off the page.</div></div>
+      </div>
+
+      <div class="donut-card reveal d1">
+        <div class="donut" role="img" aria-label="Distribution: 82% liquidity pool, 18% community, treasury and CEX reserves"></div>
+        <div class="donut-legend">
+          <div class="li"><span class="sw" style="background:var(--green)"></span> 82% — Liquidity pool (fair launch)</div>
+          <div class="li"><span class="sw" style="background:var(--gold)"></span> 18% — Community, listings &amp; memes</div>
+          <div class="li" style="color:var(--ink-faint);font-size:.74rem;margin-top:4px">no team allocation hoard · no VC bags · split finalized &amp; verifiable at launch</div>
+        </div>
+        <a class="btn btn-ghost when-live" data-link="chart" href="#" style="margin-top:18px">View contract</a>
+        <div class="when-pre" style="margin-top:16px;font-family:var(--mono);font-size:.78rem;color:var(--ink-faint)">// contract: TBA — publishes at launch</div>
+
+        <div class="moon">
+          <h4>MOON MATH</h4>
+          <div class="warn">for entertainment only</div>
+          <div class="row">
+            <span class="mono" style="color:var(--ink-dim)">$</span>
+            <input id="moon-in" type="number" min="0" placeholder="100" inputmode="decimal" aria-label="Amount in USD" />
+            <span class="mono" style="color:var(--ink-dim);font-size:.8rem">of grin money</span>
+          </div>
+          <div class="out" id="moon-out"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== CHART =========================== -->
+<section id="chart">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">the squiggly line</span>
+      <h2>Sometimes it goes up. Sometimes down.</h2>
+      <p>The cat's face does not move. Learn from the cat.</p>
+    </div>
+    <div class="chartbox reveal d1">
+      <div class="cb-head"><span class="mono" style="color:var(--gold)">$TROLL / ???</span><span class="chip"><span class="dot"></span><span class="when-pre">no price yet</span><span class="when-live">live</span></span></div>
+      <div class="cb-body">
+        <div class="msg when-pre"><span class="big cursor">chart loading... so is the cat</span>No price exists yet — because no pool exists yet. When the cat wakes up, the DexScreener chart lives right here. Until then: honestly empty.</div>
+        <div class="msg when-live"><span class="big">chart goes here</span>Embed your DexScreener iframe in this box at launch.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== MEMEDEX ========================== -->
+<section id="memedex">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">the memedex</span>
+      <h2>The grin, in the wild.</h2>
+      <p>Culture proof and shareable ammo. This is where "trade less, troll more" becomes a verb people do daily. Your #1 job isn't a logo — it's a template anyone can remix in 30 seconds.</p>
+    </div>
+    <div class="memedex">
+      <figure class="meme reveal"><img src="assets/img/meme_trader.png" alt="Troll Cat in a suit at a wall of green trading monitors" loading="lazy" decoding="async" /><figcaption class="cap">POV: you asked the cat for financial advice</figcaption></figure>
+      <figure class="meme reveal d1"><img src="assets/img/meme_moon.png" alt="Troll Cat astronaut riding a rocket to a green moon" loading="lazy" decoding="async" /><figcaption class="cap">"wagmi?" · cat: "we'll see" · <em>smirks anyway</em></figcaption></figure>
+      <figure class="meme reveal d2"><img src="assets/img/meme_diamond.png" alt="Troll Cat with glowing diamond hands and gold bars" loading="lazy" decoding="async" /><figcaption class="cap">when the candle turns red and the cat's face does not: <em>based.</em></figcaption></figure>
+      <figure class="meme reveal d3"><img src="assets/img/meme_king.png" alt="Troll Cat wearing a crown on a throne of cash and gold" loading="lazy" decoding="async" /><figcaption class="cap">the gold chain has a gold chain now. we don't ask.</figcaption></figure>
+    </div>
+    <div class="memedex-cta reveal">
+      <a class="btn btn-green" data-link="telegram" data-boop="260" href="#community">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        grab the meme pack
+      </a>
+      <a class="btn btn-ghost" data-link="x" data-boop="300" href="#community">make your own — submit yours</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================== TROLLMAP ========================= -->
+<section id="trollmap">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-inline:auto;text-align:center">
+      <span class="sec-tag">the trollmap</span>
+      <h2>A roadmap that mocks roadmaps.</h2>
+      <p>Sincerity is the red flag here. From <span class="mono gold">boot.sh</span> to <span class="mono gold">while true; do grin; done</span>.</p>
+    </div>
+    <div class="tmap">
+      <div class="phase reveal"><div class="ph">Phase 0 · boot.sh</div><h4>Cat wakes up</h4><ul><li>Cat wakes up in the terminal. Blinks in green.</li><li>Trollface calibration: 1 grin, permanently on.</li><li>Gold chain acquired (regretting nothing).</li><li>First "gm" logged to the blockchain of the heart.</li></ul></div>
+      <div class="phase reveal"><div class="ph">Phase 1</div><h4>Litter Box Assembly</h4><ul><li>Open the group chat. Let the goblins in.</li><li>Meme templates released into the wild.</li><li>First 100 people who "get it." Few, but loud.</li><li>Cat learns your names. Forgets them. Grins anyway.</li></ul></div>
+      <div class="phase reveal"><div class="ph">Phase 2</div><h4>Grin Propagation</h4><ul><li>Sticker packs, GIF packs, reaction-image packs.</li><li>The cat appears in replies he was not invited to.</li><li>"probably nothing" merch that says probably nothing.</li><li>Reach the timeline. Ruin it lovingly.</li></ul></div>
+      <div class="phase reveal"><div class="ph">Phase 3</div><h4>Terminal Green Era</h4><ul><li>Website glow-up: full green-terminal, blinking cursor.</li><li>The <span class="mono">troll --status</span> easter eggs.</li><li>Community art gallery goes live.</li><li>Someone tattoos the cat. We do not stop them.</li></ul></div>
+      <div class="phase reveal"><div class="ph">Phase 4</div><h4>Chain Polish</h4><ul><li>Gold chain gets a second gold chain.</li><li>Trollmap becomes self-aware, adds its own items.</li><li>Collab with other cats. The trollface remains superior.</li><li>The cat trends for reasons nobody can explain.</li></ul></div>
+      <div class="phase reveal"><div class="ph">Phase 5</div><h4>Peak Trollpill</h4><ul><li>Meme contests, caption wars, grin-off tournaments.</li><li>The lore doc nobody reads but everyone quotes.</li><li>New members show up already saying "few understand."</li><li>The beige becomes iconic.</li></ul></div>
+      <div class="phase reveal"><div class="ph">Phase 6</div><h4>Escape Velocity (feline)</h4><ul><li>The cat is now a reaction to the cat.</li><li>Someone's mom sends the cat back to them, unprompted.</li><li>The grin is used in arguments unrelated to crypto.</li><li>Cultural saturation achieved. The cat naps.</li></ul></div>
+      <div class="phase reveal"><div class="ph">Phase 7 · while true</div><h4>do grin; done</h4><ul><li>There is no final phase. The cat does not do endings.</li><li>Keep grinning. Keep posting. Keep petting.</li><li>WAGMI is optional. The loop is not.</li><li>gn ser. The terminal stays green.</li></ul></div>
+    </div>
+    <p class="tmap-note">// roadmap is a vibe schedule, not a promise. the cat reserves the right to nap through any item.</p>
+  </div>
+</section>
+
+<!-- ========================= COMMUNITY ========================= -->
+<section id="community">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-tag">the litter box</span>
+      <h2>One giant room of people typing "gm" at a cat.</h2>
+      <p>It's healthier than it sounds. Bring your grin, leave your cope at the door (or don't — the cat collects cope too).</p>
+    </div>
+    <div class="social-grid">
+      <a class="social reveal" data-link="x" data-boop="300" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2H21.5l-7.5 8.57L23 22h-6.75l-4.7-6.14L6.2 22H2.94l8.02-9.17L1.5 2h6.92l4.25 5.62L18.244 2zm-1.18 18h1.8L7.03 3.9H5.1L17.064 20z"/></svg></span>
+        <h4>X / Twitter</h4>
+        <p>The center of gravity. Raids, memes, ticker chants. Repetition is the marketing.</p>
+        <span class="go">follow the cat <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="social reveal d1" data-link="telegram" data-boop="260" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.6 18.6 20.2c-.25 1.1-.9 1.38-1.83.86l-5.05-3.72-2.44 2.35c-.27.27-.5.5-1 .5l.36-5.1 9.3-8.4c.4-.36-.09-.56-.63-.2L5.2 13.1l-4.96-1.55c-1.08-.34-1.1-1.08.23-1.6L20.5 3.05c.9-.33 1.68.2 1.44 1.55z"/></svg></span>
+        <h4>Telegram</h4>
+        <p>The litter box. Where retention and hype actually live. Say "gm," get trollpilled, no test.</p>
+        <span class="go">enter the terminal <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <a class="social reveal d2 when-live" data-link="chart" href="#">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="13" y="7" width="3" height="10"/><rect x="18" y="9" width="0" height="8"/></svg></span>
+        <h4>DexScreener</h4>
+        <p>The squiggly line, live. Watch it do charts. The cat won't.</p>
+        <span class="go">watch the chart <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      </a>
+      <div class="social reveal d2 when-pre">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="13" y="7" width="3" height="10"/></svg></span>
+        <h4>DexScreener</h4>
+        <p>Goes live at launch. No chart exists yet — because no pool exists yet. Honestly empty.</p>
+        <span class="go dim">chart: TBA</span>
+      </div>
+    </div>
+
+    <div class="pad-tie reveal">
+      <div class="t"><b>Launching on the Robin Labs pad.</b> Every coin graduates into a protocol-owned floor — it can't be rugged below it. That's the plan for the cat's home.</div>
+      <a class="btn btn-ghost" data-link="pad" href="https://robinlab.io">
+        visit the pad
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FAQ ============================ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-inline:auto;text-align:center">
+      <span class="sec-tag">faq</span>
+      <h2>Questions the cat won't answer (but we will).</h2>
+    </div>
+    <div class="faq">
+      <details class="qa reveal" open><summary><span class="q">Q:</span> What is TROLL CAT? <span class="sign">+</span></summary><div class="a">A beige cat wearing the trollface grin, living in a green terminal, wearing a gold chain he did not earn but absolutely deserves. It's a meme coin. It's a community. It's a picture that makes you exhale through your nose. That's the tech stack.</div></details>
+      <details class="qa reveal"><summary><span class="q">Q:</span> Ser, is this going to make me rich? <span class="sign">+</span></summary><div class="a"><b>No.</b> Nobody here is promising you a single cent, and if anyone does, they're not the cat and you should log off. $TROLL is a joke about a cat that you can hold. Come for the grin, stay for the grin, leave with the grin. Financially, expect a cat.</div></details>
+      <details class="qa reveal"><summary><span class="q">Q:</span> What's the utility? <span class="sign">+</span></summary><div class="a">The utility is the cat. The cat is the utility. Look at him. He's smirking. You already feel something. That's the roadmap, that's the whitepaper, that's the product. "few understand" — mostly because there's not much to understand, and that's the entire point.</div></details>
+      <details class="qa reveal"><summary><span class="q">Q:</span> Where's the contract? Can I buy now? <span class="sign">+</span></summary><div class="a">Not yet. $TROLL is pre-launch. No contract exists, which means any $TROLL address floating around right now is a scam — full stop. The real address gets posted here and on our official pinned socials at launch, in the same spot every time. Verify it there or don't buy. The cat has one home.</div></details>
+      <details class="qa reveal"><summary><span class="q">Q:</span> Is the team doxxed? Who runs this? <span class="sign">+</span></summary><div class="a">The cat runs this. Below the cat, some anonymous humans type things and keep the servers grinning. Anon is common in crypto and implies nothing either way — judge us by the fair launch, the LP burn, and the renounced contract we'll post proof of at launch, not by our names. Trust the grin more than any promise.</div></details>
+      <details class="qa reveal"><summary><span class="q">Q:</span> Okay but is it safe? What about a rug? <span class="sign">+</span></summary><div class="a">At launch we plan to burn the liquidity to a dead address and renounce ownership, and we'll link every transaction so you can check it yourself instead of trusting us. That kills the technical rug risk. It does <b>not</b> kill market risk — the price can still go to zero and the cat will stay beige about it. Safe code is not a safe price. Bring only what you can laugh about later.</div></details>
+      <details class="qa reveal"><summary><span class="q">Q:</span> I bought and it went down. Cope? <span class="sign">+</span></summary><div class="a">Charts do charts. The cat's face has never once moved with the candles and neither should yours. This is a meme, not a mortgage. Only ever bring what you're genuinely okay turning into a funny story later. The cat is beige in the green and beige in the red. Trade less, troll more.</div></details>
+      <details class="qa reveal"><summary><span class="q">Q:</span> Is this financial advice? <span class="sign">+</span></summary><div class="a">It is barely feline advice. Nothing on this site is financial, legal, tax, or life advice. It's a cat. Do your own research, keep your expectations at cat-level, and never invest grocery money in a smirking beige mammal. gm regardless.</div></details>
+    </div>
+    <div class="buy-cta reveal" style="gap:12px">
+      <a class="btn btn-gold pulse" data-link="buy" data-pet href="#how"><span class="when-pre">get ready</span><span class="when-live">pet the cat</span></a>
+      <a class="btn btn-ghost" data-link="telegram" data-boop="240" href="#community">join the litter box</a>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== FOOTER ========================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand"><img src="assets/img/icon.png" alt="" width="46" height="46" />TROLL CAT <span class="gold">·$TROLL</span></div>
+        <p class="disclaimer">
+          <b>$TROLL is a meme coin about a cat.</b> It is not an investment, a savings plan, a security, or a small business loan. It has no intrinsic value, no roadmap promises, and no expectation of financial return — we built it for fun and culture, not to make you money. Nothing on this site is financial, legal, or tax advice, and nobody is promising you anything except one (1) smirking beige cat. Meme coins are wildly speculative and volatile: you can lose 100% of what you put in. Holders receive no ownership, equity, or income rights. Do your own research, verify every on-chain claim yourself, and never bring more than you're ready to laugh about later. The cat is fine either way.
+        </p>
+        <p class="disclaimer" style="color:var(--ink-faint)">Not affiliated with the creator of the trollface meme, Robinhood Markets, Uniswap, DexScreener, Telegram, or X. "Trollface" © its respective creator. Not financial advice, obviously, you clown.</p>
+      </div>
+      <div class="foot-ca">
+        <div class="official">// official links only — verify the address only from these:</div>
+        <div class="ca" style="max-width:none">
+          <span class="lbl">CA</span><span class="addr" data-ca-text>TBA — not live yet</span>
+          <button class="copy" data-copy-ca data-boop="300">copy</button>
+        </div>
+        <div class="foot-links">
+          <a data-link="x" href="#">X / Twitter</a>
+          <a data-link="telegram" href="#">Telegram</a>
+          <a data-link="chart" href="#" class="when-live">DexScreener</a>
+          <a data-link="pad" href="https://robinlab.io">Robin Labs Pad</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year">2026</span> TROLL CAT — while true; do grin; done</span>
+      <a class="totop" href="#top">back to top
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
