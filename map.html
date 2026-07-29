@@ -118,10 +118,17 @@ body.trollmode #cam{animation:tmode .5s steps(2) infinite}
 @keyframes tmode{50%{filter:hue-rotate(50deg) contrast(1.12) saturate(1.3)}}
 .heckle2{position:fixed;right:14px;bottom:128px;z-index:700;background:#0b0f0a;border:1px solid var(--tox2);color:var(--tear);font-family:var(--mono);font-style:italic;font-size:.72rem;padding:.4rem .6rem;opacity:0;transition:opacity .3s;pointer-events:none}
 .heckle2.on{opacity:1}
+#splash{position:fixed;inset:0;z-index:9000;background:#04060a;display:flex;align-items:center;justify-content:center;transition:opacity .7s}
+#splash.gone{opacity:0;pointer-events:none}
+#splashvid{width:100%;height:100%;object-fit:cover;background:#04060a}
+#skip{position:fixed;right:18px;bottom:18px;z-index:9001;font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fog);background:rgba(8,12,9,.6);border:1px solid var(--edge2);padding:.5rem .85rem;cursor:pointer}
+#skip:hover{color:var(--bone);border-color:var(--tox2)}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 
 <div class="scan"></div><div class="vig"></div>
+
+<div id="splash"><video id="splashvid" src="assets/splash.mp4" muted autoplay playsinline preload="auto"></video><button id="skip" type="button">Skip &raquo;</button></div>
 
 <div id="stage">
   <div id="cam">
@@ -294,5 +301,20 @@ body.trollmode #cam{animation:tmode .5s steps(2) infinite}
   setInterval(function(){ if(document.querySelector('.panel.open')) return; hk.textContent=lines[Math.floor(Math.random()*lines.length)]; hk.classList.add('on'); setTimeout(function(){ hk.classList.remove('on'); },2600); }, 9000);
   var seq=[38,38,40,40,37,39,37,39,66,65], p=0;
   document.addEventListener('keydown',function(e){ if(e.keyCode===seq[p]){ if(++p===seq.length){ p=0; document.body.classList.toggle('trollmode'); umad('TROLL MODE'); burst(50); } } else { p=(e.keyCode===38)?1:0; } });
+})();
+</script>
+<script>
+(function(){
+  var sp=document.getElementById('splash'), v=document.getElementById('splashvid'), done=false;
+  function end(){ if(done)return; done=true; if(v){try{v.pause();}catch(e){}} sp.classList.add('gone'); setTimeout(function(){ sp.style.display='none'; },700); }
+  var sk=document.getElementById('skip'); if(sk) sk.addEventListener('click',end);
+  var seen; try{ seen=sessionStorage.getItem('tc_splash'); }catch(e){}
+  if(seen){ sp.style.display='none'; return; }
+  try{ sessionStorage.setItem('tc_splash','1'); }catch(e){}
+  if(v){ v.addEventListener('ended',end); v.addEventListener('error',end);
+    var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){});
+    setTimeout(function(){ if(v.readyState<2||v.paused){ end(); } },1800);
+    setTimeout(end,9000);
+  } else { end(); }
 })();
 </script>
