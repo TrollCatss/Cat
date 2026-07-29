@@ -106,6 +106,18 @@ a{color:inherit;text-decoration:none}
 .tline b{color:var(--tox)}
 .dim{color:var(--faint);font-size:.72rem;line-height:1.6}
 .socs{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.6rem}
+.troll-tear{position:fixed;z-index:8000;pointer-events:none;font-size:17px;animation:tfall 1.3s ease-in forwards}
+@keyframes tfall{to{opacity:0;transform:translateY(90px)}}
+#dnc{position:fixed;left:14px;bottom:16px;z-index:700;padding:.5rem .8rem;border:1px solid #5a2020;background:#160a0a;color:#ff6a5a;font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;animation:dncp 1.4s infinite}
+@keyframes dncp{50%{box-shadow:0 0 14px rgba(255,90,77,.45)}}
+#umad{position:fixed;inset:0;z-index:8500;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0}
+#umad.on{animation:umad 1.5s ease-out}
+#umad b{font-family:var(--disp);font-size:clamp(3rem,14vw,10rem);color:var(--tox);text-shadow:0 0 40px rgba(182,255,46,.6);transform:skewX(-8deg);text-transform:uppercase}
+@keyframes umad{0%{opacity:0;transform:scale(.7)}18%{opacity:1;transform:scale(1.06)}82%{opacity:1}100%{opacity:0}}
+body.trollmode #cam{animation:tmode .5s steps(2) infinite}
+@keyframes tmode{50%{filter:hue-rotate(50deg) contrast(1.12) saturate(1.3)}}
+.heckle2{position:fixed;right:14px;bottom:128px;z-index:700;background:#0b0f0a;border:1px solid var(--tox2);color:var(--tear);font-family:var(--mono);font-style:italic;font-size:.72rem;padding:.4rem .6rem;opacity:0;transition:opacity .3s;pointer-events:none}
+.heckle2.on{opacity:1}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 
@@ -264,5 +276,23 @@ a{color:inherit;text-decoration:none}
   var mc=690420, mcEl=$('#mcap'); setInterval(function(){ mc+=(Math.random()-0.42)*500; if(mc<50000)mc=50000; mcEl.textContent='$'+Math.floor(mc).toLocaleString(); },1500);
 
   home(false);
+})();
+</script>
+<script>
+(function(){
+  var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function tear(x,y){ var t=document.createElement('div'); t.className='troll-tear'; t.textContent='\\uD83D\\uDCA7'; t.style.left=(x-6)+'px'; t.style.top=(y-6)+'px'; document.body.appendChild(t); setTimeout(function(){t.remove();},1300); }
+  var lastT=0;
+  if(!RM) document.addEventListener('mousemove',function(e){ var n=Date.now(); if(n-lastT<130) return; lastT=n; if(Math.random()>0.72) tear(e.clientX,e.clientY); });
+  function burst(n){ for(var i=0;i<n;i++){ (function(d){ setTimeout(function(){ tear(Math.random()*innerWidth,-10); },d); })(i*35); } }
+  var um=document.createElement('div'); um.id='umad'; um.innerHTML='<b>U MAD?</b>'; document.body.appendChild(um);
+  function umad(t){ um.firstChild.textContent=t; um.classList.remove('on'); void um.offsetWidth; um.classList.add('on'); }
+  var dnc=document.createElement('button'); dnc.id='dnc'; dnc.type='button'; dnc.textContent='DO NOT CLICK'; document.body.appendChild(dnc);
+  var k=0; dnc.addEventListener('click',function(){ k++; umad(k%3===0?'GOT EM':(k%2?'PROBLEM?':'U MAD?')); burst(22); });
+  var hk=document.createElement('div'); hk.className='heckle2'; document.body.appendChild(hk);
+  var lines=['u back bro?','problem?','wen moon','still crying','ranked em all','u mad?','2008 core','pet the cat','trust me bro'];
+  setInterval(function(){ if(document.querySelector('.panel.open')) return; hk.textContent=lines[Math.floor(Math.random()*lines.length)]; hk.classList.add('on'); setTimeout(function(){ hk.classList.remove('on'); },2600); }, 9000);
+  var seq=[38,38,40,40,37,39,37,39,66,65], p=0;
+  document.addEventListener('keydown',function(e){ if(e.keyCode===seq[p]){ if(++p===seq.length){ p=0; document.body.classList.toggle('trollmode'); umad('TROLL MODE'); burst(50); } } else { p=(e.keyCode===38)?1:0; } });
 })();
 </script>
