@@ -308,13 +308,10 @@ body.trollmode #cam{animation:tmode .5s steps(2) infinite}
   var sp=document.getElementById('splash'), v=document.getElementById('splashvid'), done=false;
   function end(){ if(done)return; done=true; if(v){try{v.pause();}catch(e){}} sp.classList.add('gone'); setTimeout(function(){ sp.style.display='none'; },700); }
   var sk=document.getElementById('skip'); if(sk) sk.addEventListener('click',end);
-  var seen; try{ seen=sessionStorage.getItem('tc_splash'); }catch(e){}
-  if(seen){ sp.style.display='none'; return; }
-  try{ sessionStorage.setItem('tc_splash','1'); }catch(e){}
-  if(v){ v.addEventListener('ended',end); v.addEventListener('error',end);
-    var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){});
-    setTimeout(function(){ if(v.readyState<2||v.paused){ end(); } },1800);
-    setTimeout(end,9000);
-  } else { end(); }
+  if(!v){ end(); return; }
+  v.addEventListener('ended',end);
+  v.addEventListener('error',end);
+  var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){});
+  setTimeout(end,15000);
 })();
 </script>
