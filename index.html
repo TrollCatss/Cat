@@ -139,6 +139,9 @@ body.trollmode #cam{animation:tmode .5s steps(2) infinite}
 #splashvid{width:100%;height:100%;object-fit:cover;background:#04060a}
 #skip{position:fixed;right:18px;bottom:18px;z-index:9001;font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fog);background:rgba(8,12,9,.6);border:1px solid var(--edge2);padding:.5rem .85rem;cursor:pointer}
 #skip:hover{color:var(--bone);border-color:var(--tox2)}
+.rollpoop{position:absolute;width:36px;height:36px;margin:-18px 0 0 -18px;z-index:4;pointer-events:none;filter:drop-shadow(0 3px 3px rgba(0,0,0,.4));animation:roll 3.6s cubic-bezier(.5,0,.9,1) forwards}
+.rollpoop svg{width:100%;height:auto;display:block}
+@keyframes roll{0%{opacity:0;transform:rotate(0) scale(.55)}12%{opacity:1;transform:translate(6px,6px) rotate(70deg) scale(1)}100%{opacity:0;transform:translate(74px,210px) rotate(820deg) scale(.95)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 
@@ -317,6 +320,14 @@ body.trollmode #cam{animation:tmode .5s steps(2) infinite}
   setInterval(function(){ if(document.querySelector('.panel.open')) return; hk.textContent=lines[Math.floor(Math.random()*lines.length)]; hk.classList.add('on'); setTimeout(function(){ hk.classList.remove('on'); },2600); }, 9000);
   var seq=[38,38,40,40,37,39,37,39,66,65], p=0;
   document.addEventListener('keydown',function(e){ if(e.keyCode===seq[p]){ if(++p===seq.length){ p=0; document.body.classList.toggle('trollmode'); umad('TROLL MODE'); burst(50); } } else { p=(e.keyCode===38)?1:0; } });
+})();
+</script>
+<script>
+(function(){
+  var island=document.getElementById('island'); if(!island) return;
+  var POOP='<svg viewBox="0 0 64 60" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="56" rx="20" ry="3.5" fill="#00000040"/><path d="M32 8 C40 8 45 14 44 20 C52 20 58 26 56 33 C60 36 62 42 58 47 C60 52 55 58 46 58 L18 58 C9 58 4 52 6 47 C2 42 4 36 8 33 C6 26 12 20 20 20 C19 14 24 8 32 8 Z" fill="#6b4a2a" stroke="#3f2a16" stroke-width="2"/><ellipse cx="25" cy="34" rx="6" ry="6.5" fill="#f4efe6"/><ellipse cx="40" cy="34" rx="6" ry="6.5" fill="#f4efe6"/><circle cx="26" cy="35" r="2.4" fill="#141210"/><circle cx="39" cy="35" r="2.4" fill="#141210"/><path d="M22 44 Q32 52 43 44" fill="none" stroke="#141210" stroke-width="2" stroke-linecap="round"/></svg>';
+  function drop(){ if(document.hidden) return; var p=document.createElement('div'); p.className='rollpoop'; p.style.left='47%'; p.style.top='49%'; p.innerHTML=POOP; island.appendChild(p); setTimeout(function(){ p.remove(); }, 3800); }
+  setTimeout(drop, 1400); setInterval(drop, 2800);
 })();
 </script>
 <script>
