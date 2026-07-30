@@ -144,6 +144,8 @@ body.trollmode #cam{animation:tmode .5s steps(2) infinite}
 #splashvid{width:100%;height:100%;object-fit:cover;background:#04060a}
 #skip{position:fixed;right:18px;bottom:18px;z-index:9001;font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--fog);background:rgba(8,12,9,.6);border:1px solid var(--edge2);padding:.5rem .85rem;cursor:pointer}
 #skip:hover{color:var(--bone);border-color:var(--tox2)}
+#sound{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);z-index:9002;font-family:var(--mono);font-weight:700;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#0a0d06;background:var(--tox);border:none;padding:.6rem 1.1rem;cursor:pointer;animation:sndpulse 1.4s infinite}
+@keyframes sndpulse{50%{box-shadow:0 0 24px rgba(182,255,46,.7);transform:translateX(-50%) scale(1.05)}}
 .rollpoop{position:absolute;width:36px;height:36px;margin:-18px 0 0 -18px;z-index:4;pointer-events:none;filter:drop-shadow(0 3px 3px rgba(0,0,0,.4));animation:roll 3.6s cubic-bezier(.5,0,.9,1) forwards}
 .rollpoop svg{width:100%;height:auto;display:block}
 @keyframes roll{0%{opacity:0;transform:rotate(0) scale(.55)}12%{opacity:1;transform:translate(6px,6px) rotate(70deg) scale(1)}100%{opacity:0;transform:translate(74px,210px) rotate(820deg) scale(.95)}}
@@ -152,7 +154,7 @@ body.trollmode #cam{animation:tmode .5s steps(2) infinite}
 
 <div class="scan"></div><div class="vig"></div>
 
-<div id="splash"><video id="splashvid" src="assets/splash.mp4?v=2" muted autoplay playsinline preload="auto"></video><button id="skip" type="button">Skip &raquo;</button></div>
+<div id="splash"><video id="splashvid" src="assets/splash.mp4?v=2" muted autoplay playsinline preload="auto"></video><button id="sound" type="button">&#128266; Tap for sound</button><button id="skip" type="button">Skip &raquo;</button></div>
 
 <div id="stage">
   <div id="cam">
@@ -337,14 +339,19 @@ body.trollmode #cam{animation:tmode .5s steps(2) infinite}
 </script>
 <script>
 (function(){
-  var sp=document.getElementById('splash'), v=document.getElementById('splashvid'), done=false;
-  function end(){ if(done)return; done=true; if(v){try{v.pause();}catch(e){}} sp.classList.add('gone'); setTimeout(function(){ sp.style.display='none'; },700); }
-  var sk=document.getElementById('skip'); if(sk) sk.addEventListener('click',end);
+  var sp=document.getElementById('splash'), v=document.getElementById('splashvid'), snd=document.getElementById('sound'), done=false, cap;
+  function end(){ if(done)return; done=true; clearTimeout(cap); if(v){try{v.pause();}catch(e){}} sp.classList.add('gone'); setTimeout(function(){ sp.style.display='none'; },700); }
+  function snap(sec){ clearTimeout(cap); cap=setTimeout(end, sec*1000); }
+  var sk=document.getElementById('skip'); if(sk) sk.addEventListener('click', function(e){ e.stopPropagation(); end(); });
+  function sound(){ if(!v||done)return; try{ v.muted=false; v.volume=1; }catch(e){} var p=v.play(); if(p&&p.catch)p.catch(function(){}); if(snd) snd.style.display='none'; }
+  if(snd) snd.addEventListener('click', function(e){ e.stopPropagation(); sound(); });
+  if(sp) sp.addEventListener('click', function(e){ if(e.target.id==='skip') return; sound(); });
   if(!v){ end(); return; }
-  v.addEventListener('ended',end);
-  v.addEventListener('error',end);
+  v.addEventListener('ended', end);
+  v.addEventListener('error', end);
+  v.addEventListener('loadedmetadata', function(){ if(v.duration && isFinite(v.duration)) snap(v.duration+1.5); });
   var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){});
-  setTimeout(end,15000);
+  snap(20);
 })();
 </script>
 
