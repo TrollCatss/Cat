@@ -277,7 +277,7 @@ section{position:relative;padding:84px 0}
 .tmap-note{text-align:center;font-family:var(--mono);font-size:.8rem;color:var(--ink-faint);margin-top:14px}
 
 /* ---- community -------------------------------------------------------- */
-.social-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.social-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
 .social{display:flex;flex-direction:column;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:18px;
   padding:26px;transition:.18s}
 .social:hover{transform:translateY(-6px);border-color:var(--line-strong);box-shadow:0 26px 54px -30px #000,var(--glow)}

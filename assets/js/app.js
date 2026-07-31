@@ -13,8 +13,7 @@
     links: {
       buy:      "#how",                    // -> DEX deep link at launch
       chart:    "#chart",                  // -> DexScreener at launch
-      x:        "https://x.com/",          // official X (fill handle)
-      telegram: "https://t.me/trollcatt",   // official Telegram
+      x:        "https://x.com/",          // official X (fill handle) — community home
       pad:      "https://robinlab.io"      // Robin Labs pad (launch home)
     },
     ticker: [
