@@ -41,8 +41,9 @@ img,video{display:block;max-width:100%}
   repeating-linear-gradient(90deg, rgba(0,0,0,.35) 0 1px, transparent 1px 60px),
   linear-gradient(#0a110b,#060b07)}
 .ceil{background:
-  repeating-linear-gradient(0deg, rgba(182,255,46,0) 0 236px, rgba(182,255,46,.20) 236px 256px, rgba(182,255,46,0) 256px 260px),
-  linear-gradient(#0b130d,#060a07)}
+  repeating-linear-gradient(0deg, rgba(182,255,46,0) 0 210px, rgba(182,255,46,.34) 210px 232px, rgba(182,255,46,0) 232px 236px),
+  linear-gradient(90deg, transparent 40%, rgba(182,255,46,.06) 50%, transparent 60%),
+  linear-gradient(#0d160f,#070c08)}
 .wallL,.wallR{background:
   repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 3px, transparent 3px 210px),
   linear-gradient(90deg, rgba(4,7,5,.96), rgba(9,14,10,.86) 30%, rgba(9,14,10,.86) 70%, rgba(4,7,5,.96)),
@@ -51,6 +52,14 @@ img,video{display:block;max-width:100%}
   radial-gradient(60% 60% at 50% 46%, rgba(182,255,46,.16), transparent 70%),
   linear-gradient(180deg,#0b130d,#050806);
   box-shadow:0 0 120px 20px rgba(182,255,46,.12) inset}
+.rug{background:
+  linear-gradient(90deg, transparent 0 8px, rgba(244,196,48,.45) 8px 13px, transparent 13px 22px, transparent calc(100% - 22px), rgba(244,196,48,.45) calc(100% - 13px) calc(100% - 8px), transparent calc(100% - 8px)),
+  repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 2px, transparent 2px 46px),
+  linear-gradient(180deg,#1b5223,#0d2c13);
+  box-shadow:0 0 60px rgba(182,255,46,.18)}
+.sconce{position:absolute;left:0;top:0;width:12px;height:64px;border-radius:7px;pointer-events:none;
+  background:linear-gradient(#fff6d0,#f4c430);
+  box-shadow:0 0 20px 6px rgba(244,196,48,.5),0 0 54px 14px rgba(182,255,46,.16)}
 
 /* ---- an exhibit (framed art on a wall) ---- */
 .ex3{position:absolute;left:0;top:0;width:300px;transform-style:preserve-3d;
@@ -216,11 +225,19 @@ img,video{display:block;max-width:100%}
     {img:'assets/memes/light-it-up.jpg',  n:'No. XIII', t:'LIGHT IT UP',       d:'lit the fuse on the Robinhood chain'},
     {img:'assets/memes/the-incident.jpg', n:'No. XIV',  t:'THE INCIDENT',      d:'what happens in the litterbox stays in the litterbox'},
     {img:'assets/memes/sign.jpg',         n:'No. XV',   t:'THE SIGN',          d:'hand-painted · still not financial advice'},
+    {img:'assets/memes/cats/box.jpg',     n:'No. XVI',   t:'IF IT FITS, HE SITS',    d:'the box is your portfolio. it does not fit your bags.'},
+    {img:'assets/memes/cats/knock.jpg',   n:'No. XVII',  t:'THE GREAT UNSTAKING',    d:'he swatted your bags off the table. eye contact the whole time.'},
+    {img:'assets/memes/cats/loaf.jpg',    n:'No. XVIII', t:'MAXIMUM LOAF',           d:'fully tucked. hodl mode engaged. do not disturb.'},
+    {img:'assets/memes/cats/laser.jpg',   n:'No. XIX',   t:'CHASING THE RED CANDLE', d:'he sees it. he wants it. it was never real.'},
+    {img:'assets/memes/cats/zoom.jpg',    n:'No. XX',    t:'3AM ZOOMIES',            d:'the pump you slept through, reenacted at full speed.'},
+    {img:'assets/memes/cats/stare.jpg',   n:'No. XXI',   t:'STARING AT NOTHING',     d:'watching the chart. there is no chart. it is a wall.'},
+    {img:'assets/memes/cats/biscuit.jpg', n:'No. XXII',  t:'MAKING BISCUITS',        d:'kneading your cost basis. not financial advice.'},
+    {img:'assets/memes/cats/sleep.jpg',   n:'No. XXIII', t:'20-HOUR SLEEP',          d:'diamond paws. woke up. still holding. slept again.'},
     {mirror:1}
   ];
 
   // ---- corridor geometry ----
-  var HALF=300, FLOOR=250, CEIL=-250, FIRST=-1050, STEP=-880, TILT=82;
+  var HALF=270, FLOOR=215, CEIL=-215, FIRST=-980, STEP=-700, TILT=82;
   var items=EX.filter(function(e){return !e.mirror;});
   var bays=Math.ceil(items.length/2);
   var mirrorZ=FIRST+STEP*bays-160;           // far end
@@ -269,6 +286,22 @@ img,video{display:block;max-width:100%}
     plate('FINAL EXHIBIT','THE GREATEST TROLL OF ALL TIME','unveiled today · medium: you · not for sale');
   mel.style.transform='translate3d(0px,0px,'+mirrorZ+'px) rotateY(0deg) translate(-50%,-50%)';
   world.appendChild(mel);
+
+  // ---- decor: fill the hall (carpet runner + wall sconces between frames) ----
+  (function(){
+    var rug=document.createElement('div'); rug.className='plane rug';
+    rug.style.width='210px'; rug.style.height=CL+'px';
+    rug.style.transform='translate3d(0px,'+(FLOOR-2)+'px,'+midZ+'px) rotateX(90deg) translate(-50%,-50%)';
+    world.appendChild(rug);
+    for(var b=0;b<=bays;b++){
+      var z=FIRST+STEP*b - STEP/2;   // halfway between frame rows
+      [-1,1].forEach(function(side){
+        var sc=document.createElement('div'); sc.className='sconce';
+        sc.style.transform='translate3d('+(side*(HALF-5))+'px,-140px,'+z+'px) rotateY('+(side===-1?90:-90)+'deg) translate(-50%,-50%)';
+        world.appendChild(sc);
+      });
+    }
+  })();
 
   // ---- free-roam first-person camera (mouse-look + WASD + strafe) ----
   var stage=$('#stage'), enter=$('#enter'), hintbar=$('#hintbar'), count=$('#count');
