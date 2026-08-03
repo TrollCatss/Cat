@@ -50,9 +50,9 @@ img,video{display:block;max-width:100%}
   linear-gradient(90deg, rgba(12,18,13,.96), rgba(26,36,27,.92) 30%, rgba(26,36,27,.92) 70%, rgba(12,18,13,.96)),
   linear-gradient(180deg, rgba(30,42,30,.96), rgba(13,20,14,.98))}
 .endwall{background:
-  radial-gradient(60% 60% at 50% 46%, rgba(182,255,46,.16), transparent 70%),
-  linear-gradient(180deg,#0b130d,#050806);
-  box-shadow:0 0 120px 20px rgba(182,255,46,.12) inset}
+  radial-gradient(72% 72% at 50% 40%, rgba(182,255,46,.30), transparent 72%),
+  linear-gradient(180deg,#0f1810,#070c08);
+  box-shadow:0 0 170px 34px rgba(182,255,46,.22) inset}
 .rug{background:
   linear-gradient(90deg, transparent 0 8px, rgba(244,196,48,.45) 8px 13px, transparent 13px 22px, transparent calc(100% - 22px), rgba(244,196,48,.45) calc(100% - 13px) calc(100% - 8px), transparent calc(100% - 8px)),
   repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 2px, transparent 2px 46px),
@@ -240,7 +240,7 @@ img,video{display:block;max-width:100%}
     {img:'assets/memes/my-turn.jpg',      n:'No. IX',    t:'MY TURN',           d:'every cat gets one moment. this is his.'},
     {video:'assets/memes/vid/v-hoodie.mp4',poster:'assets/memes/vid/v-hoodie.jpg', n:'REEL II', t:'U MAD BRO?',     d:'crying in the hood · grinning in the void'},
     {img:'assets/memes/cats/loaf.jpg',    n:'No. X',     t:'MAXIMUM LOAF',           d:'fully tucked. hodl mode engaged. do not disturb.'},
-    {scene:1, img:'assets/memes/scn/cage1.jpg', cap:'THE COMPETITION', sub:'do not feed · do not finance · handle with tongs'},
+    {scene:1, cage:1, img:'assets/memes/scn/cage1.jpg', cap:'THE COMPETITION', sub:'do not feed · do not finance · handle with tongs'},
     {img:'assets/memes/green-tears.jpg',  n:'No. XI',    t:'TERMINAL GREEN',    d:'crying in the color of the candles'},
     {img:'assets/memes/rises.jpg',        n:'No. XII',   t:'TROLLCAT RISES',    d:'he was down bad. then he wasn\'t.'},
     {img:'assets/memes/cats/stare.jpg',   n:'No. XIII',  t:'STARING AT NOTHING',     d:'watching the chart. there is no chart. it is a wall.'},
@@ -248,7 +248,7 @@ img,video{display:block;max-width:100%}
     {video:'assets/splash.mp4', wide:true,n:'No. XIV',   t:'THE ORIGIN TAPE',   d:'now showing · on loop · forever'},
     {img:'assets/memes/cry-grin.jpg',     n:'No. XV',    t:'TEARS OF A TROLL',  d:'grinning and crying · the only two states'},
     {img:'assets/memes/cats/biscuit.jpg', n:'No. XVI',   t:'MAKING BISCUITS',        d:'kneading your cost basis. not financial advice.'},
-    {scene:1, img:'assets/memes/scn/cage2.jpg', cap:'ALSO THE COMPETITION', sub:'status: seething · volume: allegedly'},
+    {scene:1, cage:1, img:'assets/memes/scn/cage2.jpg', cap:'ALSO THE COMPETITION', sub:'status: seething · volume: allegedly'},
     {img:'assets/memes/sad.jpg',          n:'No. XVII',  t:'DOWN 90%',          d:'still grinning under there somewhere'},
     {img:'assets/memes/dump.jpg',         n:'No. XVIII', t:'IT DUMPED',         d:'the face you make at 3:00am'},
     {img:'assets/memes/cats/sleep.jpg',   n:'No. XIX',   t:'20-HOUR SLEEP',          d:'diamond paws. woke up. still holding. slept again.'},
@@ -262,22 +262,35 @@ img,video{display:block;max-width:100%}
     {mirror:1}
   ];
 
-  // ---- corridor geometry ----
-  var HALF=600, FLOOR=440, CEIL=-440, FIRST=-1080, STEP=-800, TILT=72;
-  var items=EX.filter(function(e){return !e.mirror;});
+  // ---- geometry: a GALLERY corridor that opens into a grand THRONE ROOM ----
+  var HALF=600, FLOOR=440, CEIL=-440, FIRST=-1080, STEP=-800, TILT=72, WH=FLOOR-CEIL;
+  var corridorItems=EX.filter(function(e){return !e.mirror && !e.cage;});
+  var cages=EX.filter(function(e){return e.cage;});
+  var items=corridorItems;
   var bays=Math.ceil(items.length/2);
-  var mirrorZ=FIRST+STEP*bays-160;           // far end
-  var CL=-mirrorZ+1600;                        // corridor length
-  var midZ=mirrorZ/2;
   var world=$('#world');
+  var GEND=FIRST+STEP*bays-280;                 // the doorway into the throne room
+  var GALBACK=460, CL=GALBACK-GEND, midZ=(GALBACK+GEND)/2;
+  var RHALF=700, ROOMFRONT=GEND, ROOMD=2500, ENDZ=ROOMFRONT-ROOMD, RL=ROOMD, rmidZ=(ROOMFRONT+ENDZ)/2;
+  var STATZ=ENDZ+30, ALTARZ=ENDZ+560;
 
-  // place the surfaces
   function surf(el,w,h,tf){ el.style.width=w+'px'; el.style.height=h+'px'; el.style.transform=tf+' translate(-50%,-50%)'; }
+  function mkp(cls){ var d=document.createElement('div'); d.className='plane '+cls; world.appendChild(d); return d; }
+  // gallery corridor surfaces
   surf($('#floor'), 2*HALF, CL, 'translate3d(0px,'+FLOOR+'px,'+midZ+'px) rotateX(90deg)');
   surf($('#ceil'),  2*HALF, CL, 'translate3d(0px,'+CEIL+'px,'+midZ+'px) rotateX(-90deg)');
-  surf($('#wallL'), CL, (FLOOR-CEIL), 'translate3d('+(-HALF)+'px,0px,'+midZ+'px) rotateY(90deg)');
-  surf($('#wallR'), CL, (FLOOR-CEIL), 'translate3d('+(HALF)+'px,0px,'+midZ+'px) rotateY(-90deg)');
-  surf($('#endwall'), 2*HALF, (FLOOR-CEIL), 'translate3d(0px,0px,'+(mirrorZ-30)+'px) rotateY(0deg)');
+  surf($('#wallL'), CL, WH, 'translate3d('+(-HALF)+'px,0px,'+midZ+'px) rotateY(90deg)');
+  surf($('#wallR'), CL, WH, 'translate3d('+(HALF)+'px,0px,'+midZ+'px) rotateY(-90deg)');
+  // throne room surfaces (wider + deeper)
+  surf(mkp('floor'), 2*RHALF, RL, 'translate3d(0px,'+FLOOR+'px,'+rmidZ+'px) rotateX(90deg)');
+  surf(mkp('ceil'),  2*RHALF, RL, 'translate3d(0px,'+CEIL+'px,'+rmidZ+'px) rotateX(-90deg)');
+  surf(mkp('wallL'), RL, WH, 'translate3d('+(-RHALF)+'px,0px,'+rmidZ+'px) rotateY(90deg)');
+  surf(mkp('wallR'), RL, WH, 'translate3d('+(RHALF)+'px,0px,'+rmidZ+'px) rotateY(-90deg)');
+  surf($('#endwall'), 2*RHALF, WH, 'translate3d(0px,0px,'+(ENDZ-4)+'px) rotateY(0deg)');
+  // return walls framing the doorway between gallery and throne room
+  [-1,1].forEach(function(side){
+    surf(mkp('wallL'), (RHALF-HALF), WH, 'translate3d('+(side*((HALF+RHALF)/2))+'px,0px,'+ROOMFRONT+'px) rotateY(0deg)');
+  });
 
   // ---- build exhibits on alternating walls (paired per bay, facing each other) ----
   var plate=function(n,t,d){ return '<div class="plaque"><div class="n">'+n+'</div><div class="t">'+t+'</div><div class="d">'+d+'</div></div>'; };
@@ -320,14 +333,39 @@ img,video{display:block;max-width:100%}
     '</div>'+
     '</div>'+
     plate('FINAL EXHIBIT','THE GREATEST TROLL OF ALL TIME','unveiled today · medium: you · not for sale');
-  mel.style.transform='translate3d(0px,0px,'+mirrorZ+'px) rotateY(0deg) translate(-50%,-50%)';
+  mel.style.transform='translate3d(0px,0px,'+ALTARZ+'px) rotateY(0deg) translate(-50%,-50%)';
   world.appendChild(mel);
 
-  // ---- the colossal lit-up TROLLCAT monument looming at the end of the hall ----
+  // ---- the colossal lit-up TROLLCAT monument on the throne-room back wall ----
   var gs=document.createElement('div'); gs.className='bigstatue';
   gs.innerHTML='<img src="assets/memes/scn/giant.jpg" alt="the monument">';
-  gs.style.transform='translate3d(0px,-40px,'+(mirrorZ-24)+'px) rotateY(0deg) translate(-50%,-50%)';
+  gs.style.width='880px';
+  gs.style.transform='translate3d(0px,'+(FLOOR-430)+'px,'+STATZ+'px) rotateY(0deg) translate(-50%,-50%)';
   world.appendChild(gs);
+
+  // ---- caged rivals flanking the approach to the throne ----
+  cages.forEach(function(e,i){
+    var side=(i%2===0)?-1:1, el=document.createElement('div'); el.className='ex3 scene';
+    var cap=e.cap?('<div class="plaque"><div class="t">'+e.cap+'</div>'+(e.sub?'<div class="d">'+e.sub+'</div>':'')+'</div>'):'';
+    el.innerHTML='<span class="spot"></span><div class="scenepanel"><img class="art" src="'+e.img+'" alt="the competition" loading="lazy" decoding="async"></div>'+cap;
+    el.style.transform='translate3d('+(side*560)+'px,0px,'+(ENDZ+560)+'px) rotateY('+(side===-1?42:-42)+'deg) translate(-50%,-50%)';
+    world.appendChild(el);
+  });
+  // windows onto the troll-city on the throne-room walls
+  [-1,1].forEach(function(side){
+    var w=document.createElement('div'); w.className='ex3 scene';
+    w.innerHTML='<span class="spot"></span><div class="scenepanel"><img class="art" src="assets/memes/scn/city.jpg" alt="window" loading="lazy" decoding="async"></div>';
+    w.style.transform='translate3d('+(side*(RHALF-6))+'px,0px,'+(ENDZ+1350)+'px) rotateY('+(side===-1?90:-90)+'deg) translate(-50%,-50%)';
+    world.appendChild(w);
+  });
+  // throne-room sconces (light the grand chamber)
+  [-1,1].forEach(function(side){
+    [ENDZ+240, ENDZ+900, ENDZ+1700].forEach(function(sz){
+      var sc=document.createElement('div'); sc.className='sconce';
+      sc.style.transform='translate3d('+(side*(RHALF-5))+'px,-150px,'+sz+'px) rotateY('+(side===-1?90:-90)+'deg) translate(-50%,-50%)';
+      world.appendChild(sc);
+    });
+  });
 
   // ---- decor: fill the hall (carpet runner + wall sconces between frames) ----
   (function(){
@@ -335,6 +373,10 @@ img,video{display:block;max-width:100%}
     rug.style.width='380px'; rug.style.height=CL+'px';
     rug.style.transform='translate3d(0px,'+(FLOOR-2)+'px,'+midZ+'px) rotateX(90deg) translate(-50%,-50%)';
     world.appendChild(rug);
+    var rrug=document.createElement('div'); rrug.className='plane rug';
+    rrug.style.width='520px'; rrug.style.height=RL+'px';
+    rrug.style.transform='translate3d(0px,'+(FLOOR-2)+'px,'+rmidZ+'px) rotateX(90deg) translate(-50%,-50%)';
+    world.appendChild(rrug);
     for(var b=0;b<=bays;b++){
       var z=FIRST+STEP*b - STEP/2;   // halfway between frame rows
       [-1,1].forEach(function(side){
@@ -364,7 +406,8 @@ img,video{display:block;max-width:100%}
   // ---- free-roam first-person camera (mouse-look + WASD + strafe) ----
   var stage=$('#stage'), enter=$('#enter'), hintbar=$('#hintbar'), count=$('#count');
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var XLIM=HALF-42, ZMIN=mirrorZ+150, ZMAX=140;
+  var ZMIN=ENDZ+300, ZMAX=140;
+  function xlimAt(z){ return (z < ROOMFRONT-30) ? (RHALF-70) : (HALF-42); }
   var cam={x:0,y:-55,z:FIRST+STEP*2,yaw:0,pitch:0}, vel={x:0,z:0}, keys={}, bobp=0, engaged=false;
   var SPEED=8.6, TURN=2.1, LOOK=0.16, ACC=0.2, padMove=0, padTurn=0;
 
@@ -373,7 +416,7 @@ img,video{display:block;max-width:100%}
   hcat.innerHTML='<img src="assets/img/tcat_walk.png" alt="">';
   world.appendChild(hcat);
   var hcZ=FIRST-40, hcDir=-1, hcHop=0, hcSpd=2.4, hcX=-70;
-  var HCZMIN=mirrorZ+560, HCZMAX=FIRST-40;
+  var HCZMIN=ENDZ+560, HCZMAX=FIRST-40;
 
   function render(){
     var sp=Math.sqrt(vel.x*vel.x+vel.z*vel.z);
@@ -403,7 +446,8 @@ img,video{display:block;max-width:100%}
     var tvx=(fx*mv+rx*st)*SPEED, tvz=(fz*mv+rz*st)*SPEED;
     vel.x+=(tvx-vel.x)*ACC; vel.z+=(tvz-vel.z)*ACC;
     cam.x+=vel.x; cam.z+=vel.z;
-    if(cam.x<-XLIM){cam.x=-XLIM;vel.x=0;} if(cam.x>XLIM){cam.x=XLIM;vel.x=0;}
+    var xl=xlimAt(cam.z);
+    if(cam.x<-xl){cam.x=-xl;vel.x=0;} if(cam.x>xl){cam.x=xl;vel.x=0;}
     if(cam.z<ZMIN){cam.z=ZMIN;vel.z=0;} if(cam.z>ZMAX){cam.z=ZMAX;vel.z=0;}
     render(); requestAnimationFrame(tick);
   }
@@ -420,7 +464,7 @@ img,video{display:block;max-width:100%}
   // scroll = glide forward/back along the view direction
   window.addEventListener('wheel',function(e){ var ya=cam.yaw*Math.PI/180, d=-e.deltaY*0.6;
     cam.z+=-Math.cos(ya)*d; cam.x+=Math.sin(ya)*d;
-    cam.z=Math.max(ZMIN,Math.min(ZMAX,cam.z)); cam.x=Math.max(-XLIM,Math.min(XLIM,cam.x));
+    cam.z=Math.max(ZMIN,Math.min(ZMAX,cam.z)); var xl=xlimAt(cam.z); cam.x=Math.max(-xl,Math.min(xl,cam.x));
     e.preventDefault(); }, {passive:false});
 
   // look: drag anywhere, or pointer-lock the mouse (click)
