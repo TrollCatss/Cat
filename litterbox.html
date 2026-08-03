@@ -115,12 +115,12 @@ header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem 1.4rem;justify-
 
 /* THE actual Venice trollcat -- wanders the box, squats to poop */
 .tcat{position:absolute;bottom:11%;left:18%;width:clamp(88px,12vw,122px);z-index:160;cursor:pointer;
-  transition:left 1.05s cubic-bezier(.45,0,.25,1), bottom 1.05s cubic-bezier(.5,-.2,.3,1.25);filter:drop-shadow(0 12px 12px rgba(0,0,0,.55))}
+  transition:left .3s ease, bottom .3s ease;filter:drop-shadow(0 12px 12px rgba(0,0,0,.55))}
 .tcat .bob{animation:catbob 1.6s ease-in-out infinite;transform-origin:bottom center}
-.tcat.walking .bob{animation:hop .4s ease-in-out infinite}
+.tcat.walking .bob{animation:hop .3s ease-in-out infinite}
 .tcat.pooping .bob{animation:none}
 @keyframes catbob{0%,100%{transform:translateY(0) scaleY(1) rotate(-.6deg)}50%{transform:translateY(-4px) scaleY(1.035) rotate(.6deg)}}
-@keyframes hop{0%{transform:translateY(0) scaleY(.94)}30%{transform:translateY(-20px) scaleY(1.08) rotate(-3deg)}55%{transform:translateY(-20px) scaleY(1.06) rotate(3deg)}100%{transform:translateY(0) scaleY(.94)}}
+@keyframes hop{0%,100%{transform:translateY(0) scaleY(.86)}45%{transform:translateY(-26px) scaleY(1.14)}}
 .tcat .face{transition:transform .2s}
 .tcat .face.left{transform:scaleX(-1)}
 .tcat .sq{transform-origin:bottom center}
@@ -340,20 +340,32 @@ header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem 1.4rem;justify-
 
   // ---- THE CAT ----
   var tcat=$('#tcat'), tface=$('#tface'), tsq=$('#tsq'), catEl=$('#catsay');
-  var catX=18, busy=false, catT;
+  var catX=18, busy=false, catT, hopTimer;
   var idleLines=['fresh.','mine.','who next?','ranked & spanked','u back bro?','sniff sniff','still crying','the box is mine'];
   function say(s){ catEl.textContent=s; clearTimeout(catT); catT=setTimeout(function(){ catEl.textContent=idleLines[Math.floor(Math.random()*idleLines.length)]; }, 2600); }
-  function walkTo(x, yb){ if(x<10)x=10; if(x>90)x=90; tface.className='face'+(x<catX?' left':''); catX=x; tcat.style.left=x+'%'; if(yb!=null) tcat.style.bottom=yb+'%'; }
+  function hopTo(x, yb, done){
+    x=Math.max(10,Math.min(90,x)); clearTimeout(hopTimer);
+    var sx=catX, sy=parseFloat(tcat.style.bottom)||11, ey=(yb==null?sy:yb);
+    var hops=Math.max(1, Math.round(Math.abs(x-sx)/9));
+    tface.className='face'+(x<sx?' left':''); tcat.classList.add('walking');
+    var i=0;
+    (function step(){ i++; var f=i/hops;
+      tcat.style.transition='left .3s cubic-bezier(.4,0,.5,1), bottom .3s ease-out';
+      tcat.style.left=(sx+(x-sx)*f)+'%'; tcat.style.bottom=(sy+(ey-sy)*f)+'%'; catX=sx+(x-sx)*f;
+      if(i>=hops){ hopTimer=setTimeout(function(){ tcat.classList.remove('walking'); if(done)done(); },300); }
+      else hopTimer=setTimeout(step,300);
+    })();
+  }
+  function walkTo(x, yb){ hopTo(x, yb); }
 
   function catShitOn(t){
     if(busy) return; var d=coinEl(t); if(!d){ return; }
-    busy=true; tcat.classList.add('busy','walking');
+    busy=true; say('...');
     var cr=d.getBoundingClientRect(), sr=stage.getBoundingClientRect();
     var xPct=(cr.left+cr.width/2 - sr.left)/sr.width*100;
     var yb=(sr.height-(cr.top+cr.height*0.60-sr.top))/sr.height*100;
-    walkTo(xPct, yb); say('...');
-    setTimeout(function(){
-      tcat.classList.remove('walking'); tcat.classList.add('pooping');
+    hopTo(xPct, yb, function(){
+      tcat.classList.add('pooping');
       setTimeout(function(){
         var soil=$('.soil',d); if(soil){ soil.classList.add('show'); }
         d.classList.add('hit');
@@ -362,11 +374,10 @@ header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem 1.4rem;justify-
         deposits++; $('#scoopcount').textContent=deposits+' deposit'+(deposits===1?'':'s')+' today';
         pulseRow(t); say('shat on $'+t+'. lmao.');
         setTimeout(function(){ tcat.classList.remove('pooping'); d.classList.remove('hit');
-          tcat.classList.add('walking'); walkTo(Math.max(14,Math.min(84,xPct+(Math.random()<0.5?-18:18))), 11);
-          setTimeout(function(){ tcat.classList.remove('walking','busy'); busy=false; }, 1050); }, 950);
+          hopTo(Math.max(14,Math.min(84,xPct+(Math.random()<0.5?-20:20))), 11, function(){ busy=false; }); }, 950);
         setTimeout(function(){ if(soil) soil.classList.remove('show'); }, 5200);
-      }, 480);
-    }, 1100);
+      }, 460);
+    });
   }
 
   function pulseRow(t){ [].forEach.call(rowWrap.children,function(r){ var n=$('.n',r); if(n&&n.textContent.indexOf('$'+t)===0){ r.style.background='rgba(182,255,46,.18)'; setTimeout(function(){ r.style.background=''; },500); } }); }
