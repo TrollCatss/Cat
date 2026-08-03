@@ -62,6 +62,25 @@ img,video{display:block;max-width:100%}
   background:linear-gradient(#fff6d0,#f4c430);
   box-shadow:0 0 20px 6px rgba(244,196,48,.5),0 0 54px 14px rgba(182,255,46,.16)}
 
+/* scenery: statue niches + windows set into the wall (no gold frame) */
+.ex3.scene{width:344px}
+.ex3.scene .scenepanel{position:relative;border-radius:5px;overflow:hidden;border:6px solid #090e0a;
+  box-shadow:0 0 0 2px rgba(0,0,0,.6), inset 0 0 42px rgba(0,0,0,.6), 0 34px 54px -22px #000, 0 0 30px rgba(182,255,46,.10)}
+.ex3.scene .art{width:344px;height:440px;object-fit:cover;display:block;background:#070b07}
+/* a live TROLLCAT patrolling the gallery */
+.hallcat{position:absolute;left:0;top:0;width:118px;pointer-events:none;transform-style:preserve-3d;transform-origin:50% 100%;
+  filter:drop-shadow(0 10px 12px rgba(0,0,0,.6))}
+.hallcat img{width:100%;height:auto;display:block}
+/* the colossal monument at the end of the hall */
+.bigstatue{position:absolute;left:0;top:0;width:840px;pointer-events:none;filter:drop-shadow(0 0 70px rgba(182,255,46,.22))}
+.bigstatue img{width:100%;height:auto;display:block;border-radius:4px}
+/* velvet rope stanchions along the walkway */
+.roperail{background:linear-gradient(180deg,#8a2323,#4c1414);box-shadow:0 0 12px rgba(0,0,0,.5),0 0 10px rgba(138,35,35,.3)}
+.post{position:absolute;left:0;top:0;width:9px;border-radius:5px;pointer-events:none;
+  background:linear-gradient(90deg,#c99a2e,#ffe9a8 45%,#c99a2e);box-shadow:0 0 8px rgba(244,196,48,.4)}
+.post:before{content:"";position:absolute;left:50%;top:-9px;width:15px;height:15px;transform:translateX(-50%);border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#fff2c0,#c99a2e);box-shadow:0 0 8px rgba(244,196,48,.6)}
+
 /* ---- an exhibit (framed art on a wall) ---- */
 .ex3{position:absolute;left:0;top:0;width:300px;transform-style:preserve-3d;
   display:flex;flex-direction:column;align-items:center;filter:drop-shadow(0 26px 34px rgba(0,0,0,.6))}
@@ -217,19 +236,25 @@ img,video{display:block;max-width:100%}
     {video:'assets/memes/vid/v-crowd.mp4', poster:'assets/memes/vid/v-crowd.jpg', wide:true, n:'REEL I',  t:'THE GREEN SUIT', d:'walking through the wagies like they owe him money'},
     {img:'assets/memes/problem.jpg',      n:'No. VII',   t:'PROBLEM?',          d:'he has a vape and a plan. mostly the vape.'},
     {img:'assets/memes/cats/zoom.jpg',    n:'No. VIII',  t:'3AM ZOOMIES',            d:'the pump you slept through, reenacted at full speed.'},
+    {scene:1, img:'assets/memes/scn/city.jpg'},
     {img:'assets/memes/my-turn.jpg',      n:'No. IX',    t:'MY TURN',           d:'every cat gets one moment. this is his.'},
     {video:'assets/memes/vid/v-hoodie.mp4',poster:'assets/memes/vid/v-hoodie.jpg', n:'REEL II', t:'U MAD BRO?',     d:'crying in the hood · grinning in the void'},
     {img:'assets/memes/cats/loaf.jpg',    n:'No. X',     t:'MAXIMUM LOAF',           d:'fully tucked. hodl mode engaged. do not disturb.'},
+    {scene:1, img:'assets/memes/scn/cage1.jpg', cap:'THE COMPETITION', sub:'do not feed · do not finance · handle with tongs'},
     {img:'assets/memes/green-tears.jpg',  n:'No. XI',    t:'TERMINAL GREEN',    d:'crying in the color of the candles'},
     {img:'assets/memes/rises.jpg',        n:'No. XII',   t:'TROLLCAT RISES',    d:'he was down bad. then he wasn\'t.'},
     {img:'assets/memes/cats/stare.jpg',   n:'No. XIII',  t:'STARING AT NOTHING',     d:'watching the chart. there is no chart. it is a wall.'},
+    {scene:1, img:'assets/memes/scn/statue.jpg'},
     {video:'assets/splash.mp4', wide:true,n:'No. XIV',   t:'THE ORIGIN TAPE',   d:'now showing · on loop · forever'},
     {img:'assets/memes/cry-grin.jpg',     n:'No. XV',    t:'TEARS OF A TROLL',  d:'grinning and crying · the only two states'},
     {img:'assets/memes/cats/biscuit.jpg', n:'No. XVI',   t:'MAKING BISCUITS',        d:'kneading your cost basis. not financial advice.'},
+    {scene:1, img:'assets/memes/scn/cage2.jpg', cap:'ALSO THE COMPETITION', sub:'status: seething · volume: allegedly'},
     {img:'assets/memes/sad.jpg',          n:'No. XVII',  t:'DOWN 90%',          d:'still grinning under there somewhere'},
     {img:'assets/memes/dump.jpg',         n:'No. XVIII', t:'IT DUMPED',         d:'the face you make at 3:00am'},
     {img:'assets/memes/cats/sleep.jpg',   n:'No. XIX',   t:'20-HOUR SLEEP',          d:'diamond paws. woke up. still holding. slept again.'},
+    {scene:1, img:'assets/memes/scn/bust.jpg'},
     {img:'assets/memes/pump.jpg',         n:'No. XX',    t:'IT PUMPED',         d:'the face you make at 3:01am'},
+    {scene:1, img:'assets/memes/scn/city.jpg'},
     {video:'assets/memes/vid/v-forest.mp4',poster:'assets/memes/vid/v-forest.jpg', n:'REEL III',t:'DOOMSCROLL',     d:'checking the chart in nature. nature is also red.'},
     {img:'assets/memes/light-it-up.jpg',  n:'No. XXI',   t:'LIGHT IT UP',       d:'lit the fuse on the Robinhood chain'},
     {img:'assets/memes/the-incident.jpg', n:'No. XXII',  t:'THE INCIDENT',      d:'what happens in the litterbox stays in the litterbox'},
@@ -259,9 +284,19 @@ img,video{display:block;max-width:100%}
   items.forEach(function(e,i){
     var bay=Math.floor(i/2), side=(i%2===0)?-1:1;   // even = left wall, odd = right wall
     var z=FIRST+STEP*bay;
-    var x=side*(HALF-14);
     var ry=(side===-1)?TILT:-TILT;                   // tilt slightly toward the walker
-    var el=document.createElement('div'); el.className='ex3'+(e.wide?' wide':'');
+    var el=document.createElement('div');
+    if(e.scene){
+      el.className='ex3 scene';
+      var cap=e.cap?('<div class="plaque"><div class="t">'+e.cap+'</div>'+(e.sub?'<div class="d">'+e.sub+'</div>':'')+'</div>'):'';
+      el.innerHTML='<span class="spot"></span><div class="scenepanel"><img class="art" src="'+e.img+'" alt="scenery" loading="lazy" decoding="async"></div>'+cap;
+      el.style.transform='translate3d('+(side*(HALF-6))+'px,0px,'+z+'px) rotateY('+ry+'deg) translate(-50%,-50%)';
+      world.appendChild(el);
+      el.querySelector('img.art').addEventListener('error',function(){ el.parentNode&&el.parentNode.removeChild(el); });
+      return;
+    }
+    var x=side*(HALF-14);
+    el.className='ex3'+(e.wide?' wide':'');
     var media=e.video
       ? '<video class="art" src="'+e.video+'"'+(e.poster?' poster="'+e.poster+'"':'')+' autoplay muted loop playsinline preload="metadata"></video>'
       : '<img class="art" src="'+e.img+'" alt="'+e.t+'" loading="lazy" decoding="async">';
@@ -288,6 +323,12 @@ img,video{display:block;max-width:100%}
   mel.style.transform='translate3d(0px,0px,'+mirrorZ+'px) rotateY(0deg) translate(-50%,-50%)';
   world.appendChild(mel);
 
+  // ---- the colossal lit-up TROLLCAT monument looming at the end of the hall ----
+  var gs=document.createElement('div'); gs.className='bigstatue';
+  gs.innerHTML='<img src="assets/memes/scn/giant.jpg" alt="the monument">';
+  gs.style.transform='translate3d(0px,-40px,'+(mirrorZ-24)+'px) rotateY(0deg) translate(-50%,-50%)';
+  world.appendChild(gs);
+
   // ---- decor: fill the hall (carpet runner + wall sconces between frames) ----
   (function(){
     var rug=document.createElement('div'); rug.className='plane rug';
@@ -302,6 +343,22 @@ img,video{display:block;max-width:100%}
         world.appendChild(sc);
       });
     }
+    // velvet rope stanchions lining the walkway
+    var RH=FLOOR-98, RX=232;
+    [-1,1].forEach(function(side){
+      var rail=document.createElement('div'); rail.className='plane roperail';
+      rail.style.width=CL+'px'; rail.style.height='7px';
+      rail.style.transform='translate3d('+(side*RX)+'px,'+RH+'px,'+midZ+'px) rotateY('+(side===-1?90:-90)+'deg) translate(-50%,-50%)';
+      world.appendChild(rail);
+    });
+    for(var b2=0;b2<=bays;b2++){
+      var pz=FIRST+STEP*b2;
+      [-1,1].forEach(function(side){
+        var po=document.createElement('div'); po.className='post'; po.style.height=(FLOOR-RH)+'px';
+        po.style.transform='translate3d('+(side*RX)+'px,'+RH+'px,'+pz+'px) rotateY('+(side===-1?90:-90)+'deg) translate(-50%,0)';
+        world.appendChild(po);
+      });
+    }
   })();
 
   // ---- free-roam first-person camera (mouse-look + WASD + strafe) ----
@@ -310,6 +367,13 @@ img,video{display:block;max-width:100%}
   var XLIM=HALF-42, ZMIN=mirrorZ+150, ZMAX=140;
   var cam={x:0,y:-55,z:FIRST+STEP*2,yaw:0,pitch:0}, vel={x:0,z:0}, keys={}, bobp=0, engaged=false;
   var SPEED=8.6, TURN=2.1, LOOK=0.16, ACC=0.2, padMove=0, padTurn=0;
+
+  // a live TROLLCAT patrolling the hall (billboard that always faces you)
+  var hcat=document.createElement('div'); hcat.className='hallcat';
+  hcat.innerHTML='<img src="assets/img/tcat_walk.png" alt="">';
+  world.appendChild(hcat);
+  var hcZ=FIRST-40, hcDir=-1, hcHop=0, hcSpd=2.4, hcX=-70;
+  var HCZMIN=mirrorZ+560, HCZMAX=FIRST-40;
 
   function render(){
     var sp=Math.sqrt(vel.x*vel.x+vel.z*vel.z);
@@ -320,6 +384,12 @@ img,video{display:block;max-width:100%}
     count.innerHTML='<b>'+String(prog).padStart(2,'0')+'</b>% in';
     if(!engaged && (Math.abs(cam.yaw)>3 || Math.abs(cam.pitch)>3 || sp>0.6 || Math.abs(cam.x)>30 || Math.abs(cam.z-(FIRST+STEP*2))>30)){
       engaged=true; enter.classList.add('gone'); hintbar.style.opacity='0'; }
+    // the patrolling cat (hops down the hall, billboard faces the camera)
+    hcZ += hcDir*hcSpd;
+    if(hcZ<HCZMIN){hcZ=HCZMIN;hcDir=1;} else if(hcZ>HCZMAX){hcZ=HCZMAX;hcDir=-1;}
+    hcHop += reduce?0:0.22;
+    var hy=Math.abs(Math.sin(hcHop))*11, flip=hcDir<0?1:-1;
+    hcat.style.transform='translate3d('+hcX+'px,'+(FLOOR-hy).toFixed(1)+'px,'+hcZ.toFixed(1)+'px) rotateY('+cam.yaw.toFixed(2)+'deg) scale('+flip+',1) translate(-50%,-100%)';
   }
   function tick(){
     var mv=padMove, st=0, tn=padTurn;
