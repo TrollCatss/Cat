@@ -182,12 +182,7 @@ img,video{display:block;max-width:100%}
 
 <div class="stage" id="stage">
   <div class="world" id="world">
-    <div class="plane floor" id="floor"></div>
-    <div class="plane ceil" id="ceil"></div>
-    <div class="plane wallL" id="wallL"></div>
-    <div class="plane wallR" id="wallR"></div>
-    <div class="plane endwall" id="endwall"></div>
-    <!-- exhibits + mirror injected here -->
+    <!-- chambers, exhibits + mirror injected here -->
   </div>
 </div>
 
@@ -262,35 +257,44 @@ img,video{display:block;max-width:100%}
     {mirror:1}
   ];
 
-  // ---- geometry: a GALLERY corridor that opens into a grand THRONE ROOM ----
+  // ---- geometry: a WORLD of three connected chambers you walk between ----
+  // THE GALLERY (art)  ->  THE DUNGEON (caged rivals)  ->  THE THRONE ROOM (statue + mirror finale)
   var HALF=600, FLOOR=440, CEIL=-440, FIRST=-1080, STEP=-800, TILT=72, WH=FLOOR-CEIL;
   var corridorItems=EX.filter(function(e){return !e.mirror && !e.cage;});
   var cages=EX.filter(function(e){return e.cage;});
   var items=corridorItems;
   var bays=Math.ceil(items.length/2);
   var world=$('#world');
-  var GEND=FIRST+STEP*bays-280;                 // the doorway into the throne room
-  var GALBACK=460, CL=GALBACK-GEND, midZ=(GALBACK+GEND)/2;
-  var RHALF=700, ROOMFRONT=GEND, ROOMD=2500, ENDZ=ROOMFRONT-ROOMD, RL=ROOMD, rmidZ=(ROOMFRONT+ENDZ)/2;
+  var GALBACK=460, DHALF=520, RHALF=760;                  // gallery / dungeon / throne half-widths
+  var G1=FIRST+STEP*(bays-1)-520;                          // gallery -> dungeon doorway
+  var G2=G1-1900;                                          // dungeon -> throne doorway
+  var ENDZ=G2-2500;                                        // throne-room back wall
+  var CL=GALBACK-G1, midZ=(GALBACK+G1)/2;                  // gallery span
+  var DL=G1-G2,      dmidZ=(G1+G2)/2;                      // dungeon span
+  var RL=G2-ENDZ,    rmidZ=(G2+ENDZ)/2;                    // throne span
   var STATZ=ENDZ+30, ALTARZ=ENDZ+560;
 
   function surf(el,w,h,tf){ el.style.width=w+'px'; el.style.height=h+'px'; el.style.transform=tf+' translate(-50%,-50%)'; }
   function mkp(cls){ var d=document.createElement('div'); d.className='plane '+cls; world.appendChild(d); return d; }
-  // gallery corridor surfaces
-  surf($('#floor'), 2*HALF, CL, 'translate3d(0px,'+FLOOR+'px,'+midZ+'px) rotateX(90deg)');
-  surf($('#ceil'),  2*HALF, CL, 'translate3d(0px,'+CEIL+'px,'+midZ+'px) rotateX(-90deg)');
-  surf($('#wallL'), CL, WH, 'translate3d('+(-HALF)+'px,0px,'+midZ+'px) rotateY(90deg)');
-  surf($('#wallR'), CL, WH, 'translate3d('+(HALF)+'px,0px,'+midZ+'px) rotateY(-90deg)');
-  // throne room surfaces (wider + deeper)
-  surf(mkp('floor'), 2*RHALF, RL, 'translate3d(0px,'+FLOOR+'px,'+rmidZ+'px) rotateX(90deg)');
-  surf(mkp('ceil'),  2*RHALF, RL, 'translate3d(0px,'+CEIL+'px,'+rmidZ+'px) rotateX(-90deg)');
-  surf(mkp('wallL'), RL, WH, 'translate3d('+(-RHALF)+'px,0px,'+rmidZ+'px) rotateY(90deg)');
-  surf(mkp('wallR'), RL, WH, 'translate3d('+(RHALF)+'px,0px,'+rmidZ+'px) rotateY(-90deg)');
-  surf($('#endwall'), 2*RHALF, WH, 'translate3d(0px,0px,'+(ENDZ-4)+'px) rotateY(0deg)');
-  // return walls framing the doorway between gallery and throne room
-  [-1,1].forEach(function(side){
-    surf(mkp('wallL'), (RHALF-HALF), WH, 'translate3d('+(side*((HALF+RHALF)/2))+'px,0px,'+ROOMFRONT+'px) rotateY(0deg)');
-  });
+  function chamber(h,zF,zB){                               // 4 surfaces spanning [zF..zB] at half-width h
+    var len=zF-zB, mid=(zF+zB)/2;
+    surf(mkp('floor'), 2*h, len, 'translate3d(0px,'+FLOOR+'px,'+mid+'px) rotateX(90deg)');
+    surf(mkp('ceil'),  2*h, len, 'translate3d(0px,'+CEIL+'px,'+mid+'px) rotateX(-90deg)');
+    surf(mkp('wallL'), len, WH, 'translate3d('+(-h)+'px,0px,'+mid+'px) rotateY(90deg)');
+    surf(mkp('wallR'), len, WH, 'translate3d('+(h)+'px,0px,'+mid+'px) rotateY(-90deg)');
+  }
+  function doorway(ha,hb,z){                               // wall covering the width step, framing the opening
+    var lo=Math.min(ha,hb), hi=Math.max(ha,hb); if(hi<=lo) return;
+    [-1,1].forEach(function(side){
+      surf(mkp('wallL'), (hi-lo), WH, 'translate3d('+(side*((lo+hi)/2))+'px,0px,'+z+'px) rotateY(0deg)');
+    });
+  }
+  chamber(HALF, GALBACK, G1);     // THE GALLERY
+  chamber(DHALF, G1, G2);         // THE DUNGEON
+  chamber(RHALF, G2, ENDZ);       // THE THRONE ROOM
+  doorway(HALF, DHALF, G1);
+  doorway(DHALF, RHALF, G2);
+  surf(mkp('endwall'), 2*RHALF, WH, 'translate3d(0px,0px,'+(ENDZ-4)+'px) rotateY(0deg)');
 
   // ---- build exhibits on alternating walls (paired per bay, facing each other) ----
   var plate=function(n,t,d){ return '<div class="plaque"><div class="n">'+n+'</div><div class="t">'+t+'</div><div class="d">'+d+'</div></div>'; };
@@ -343,14 +347,18 @@ img,video{display:block;max-width:100%}
   gs.style.transform='translate3d(0px,'+(FLOOR-430)+'px,'+STATZ+'px) rotateY(0deg) translate(-50%,-50%)';
   world.appendChild(gs);
 
-  // ---- caged rivals flanking the approach to the throne ----
-  cages.forEach(function(e,i){
-    var side=(i%2===0)?-1:1, el=document.createElement('div'); el.className='ex3 scene';
-    var cap=e.cap?('<div class="plaque"><div class="t">'+e.cap+'</div>'+(e.sub?'<div class="d">'+e.sub+'</div>':'')+'</div>'):'';
-    el.innerHTML='<span class="spot"></span><div class="scenepanel"><img class="art" src="'+e.img+'" alt="the competition" loading="lazy" decoding="async"></div>'+cap;
-    el.style.transform='translate3d('+(side*560)+'px,0px,'+(ENDZ+560)+'px) rotateY('+(side===-1?42:-42)+'deg) translate(-50%,-50%)';
-    world.appendChild(el);
-  });
+  // ---- THE DUNGEON: caged rivals lining both walls of the tight passage ----
+  (function(){
+    for(var i=0;i<6;i++){
+      var side=(i%2===0)?-1:1, row=Math.floor(i/2), e=cages[i%cages.length];
+      var cz=G1-500 - row*560;
+      var el=document.createElement('div'); el.className='ex3 scene';
+      var cap='<div class="plaque"><div class="t">'+(e.cap||'THE COMPETITION')+'</div>'+(e.sub?'<div class="d">'+e.sub+'</div>':'')+'</div>';
+      el.innerHTML='<span class="spot"></span><div class="scenepanel"><img class="art" src="'+e.img+'" alt="caged rival" loading="lazy" decoding="async"></div>'+cap;
+      el.style.transform='translate3d('+(side*(DHALF-6))+'px,0px,'+cz+'px) rotateY('+(side===-1?90:-90)+'deg) translate(-50%,-50%)';
+      world.appendChild(el);
+    }
+  })();
   // windows onto the troll-city on the throne-room walls
   [-1,1].forEach(function(side){
     var w=document.createElement('div'); w.className='ex3 scene';
@@ -377,6 +385,14 @@ img,video{display:block;max-width:100%}
     rrug.style.width='520px'; rrug.style.height=RL+'px';
     rrug.style.transform='translate3d(0px,'+(FLOOR-2)+'px,'+rmidZ+'px) rotateX(90deg) translate(-50%,-50%)';
     world.appendChild(rrug);
+    var drug=document.createElement('div'); drug.className='plane rug';
+    drug.style.width='300px'; drug.style.height=DL+'px';
+    drug.style.transform='translate3d(0px,'+(FLOOR-2)+'px,'+dmidZ+'px) rotateX(90deg) translate(-50%,-50%)';
+    world.appendChild(drug);
+    for(var d2=0;d2<3;d2++){ var dz=G1-500 - d2*560;
+      [-1,1].forEach(function(side){ var sc=document.createElement('div'); sc.className='sconce';
+        sc.style.transform='translate3d('+(side*(DHALF-5))+'px,-150px,'+(dz-280)+'px) rotateY('+(side===-1?90:-90)+'deg) translate(-50%,-50%)';
+        world.appendChild(sc); }); }
     for(var b=0;b<=bays;b++){
       var z=FIRST+STEP*b - STEP/2;   // halfway between frame rows
       [-1,1].forEach(function(side){
@@ -407,7 +423,7 @@ img,video{display:block;max-width:100%}
   var stage=$('#stage'), enter=$('#enter'), hintbar=$('#hintbar'), count=$('#count');
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var ZMIN=ENDZ+300, ZMAX=140;
-  function xlimAt(z){ return (z < ROOMFRONT-30) ? (RHALF-70) : (HALF-42); }
+  function xlimAt(z){ if(z>G1) return HALF-42; if(z>G2) return DHALF-42; return RHALF-70; }
   var cam={x:0,y:-55,z:FIRST+STEP*2,yaw:0,pitch:0}, vel={x:0,z:0}, keys={}, bobp=0, engaged=false;
   var SPEED=8.6, TURN=2.1, LOOK=0.16, ACC=0.2, padMove=0, padTurn=0;
 
