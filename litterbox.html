@@ -113,6 +113,11 @@ header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem 1.4rem;justify-
 /* the $TROLLCAT sign (white-bg jpg keyed to transparent at runtime) */
 .sign{position:absolute;left:3%;bottom:44%;width:120px;height:auto;z-index:2;filter:drop-shadow(0 8px 10px rgba(0,0,0,.55));transform:rotate(-3deg)}
 
+.shitcount{display:inline-flex;align-items:center;gap:.4rem;font-family:ui-monospace,monospace;font-weight:700;font-size:.82rem;color:#f4c430;background:rgba(244,196,48,.1);border:1px solid rgba(244,196,48,.42);border-radius:20px;padding:.34rem .72rem;margin-left:.6rem;white-space:nowrap;vertical-align:middle}
+.shitcount b{color:#fff;font-size:.98rem}
+.shitcount .lbl{color:#9a8a5a;font-weight:600}
+.shitcount.pop{animation:shitpop .42s ease}
+@keyframes shitpop{0%{transform:scale(1)}40%{transform:scale(1.2);color:#b6ff2e}100%{transform:scale(1)}}
 /* THE actual Venice trollcat -- wanders the box, squats to poop */
 .tcat{position:absolute;bottom:11%;left:18%;width:clamp(88px,12vw,122px);z-index:160;cursor:pointer;
   transition:left .3s ease, bottom .3s ease;filter:drop-shadow(0 12px 12px rgba(0,0,0,.55))}
@@ -204,6 +209,7 @@ header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem 1.4rem;justify-
       <h1>THE&nbsp;LITTER<span class="b">BOX</span></h1>
       <p class="sub"><b>Robinhood Chain's</b> top tokens by 24h volume &mdash; real projects, real PFPs, buried in the litter. click one and <b class="g">TROLLCAT decides who gets shat on.</b></p>
       <span class="live"><span class="dot"></span><span id="scooptime">last scooped 0s ago</span></span>
+      <span class="shitcount" id="shitcount" title="all-time deposits by the cat"><svg viewBox="0 0 100 104" width="15" height="15" style="vertical-align:-3px"><use href="#poopSym"/></svg><b id="shitnum">0</b><span class="lbl">shat all-time</span></span>
     </div>
     <div class="controls">
       <div class="seg" id="sort">
@@ -371,7 +377,7 @@ header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem 1.4rem;justify-
         d.classList.add('hit');
         for(var f=0;f<3;f++){ var fl=document.createElement('div'); fl.className='fly';
           fl.style.left=(30+f*20)+'%'; fl.style.top=(20+f*8)+'%'; fl.style.animationDelay=(f*0.3)+'s'; $('.cbob',d).appendChild(fl); }
-        deposits++; $('#scoopcount').textContent=deposits+' deposit'+(deposits===1?'':'s')+' today';
+        deposits++; $('#scoopcount').textContent=deposits+' deposit'+(deposits===1?'':'s')+' today'; bumpShits();
         pulseRow(t); say('shat on $'+t+'. lmao.');
         setTimeout(function(){ tcat.classList.remove('pooping'); d.classList.remove('hit');
           hopTo(Math.max(14,Math.min(84,xPct+(Math.random()<0.5?-20:20))), 11, function(){ busy=false; }); }, 950);
@@ -401,6 +407,12 @@ header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1rem 1.4rem;justify-
   var t0=0; setInterval(function(){ t0++; $('#scooptime').textContent='last scooped '+t0+'s ago'; }, 1000);
   setInterval(function(){ coins.forEach(function(c){ c.v=Math.max(1000, c.v*(1+(Math.random()-0.5)*0.03)); c.c=Math.max(-95,Math.min(400, c.c+(Math.random()-0.5)*3)); }); if(!tip.classList.contains('on')&&!busy) render(); }, 3400);
   setInterval(function(){ if(!busy&&Math.random()>0.5) say(idleLines[Math.floor(Math.random()*idleLines.length)]); }, 6000);
+
+  // all-time shit counter (persisted across visits)
+  var SHITS=parseInt(localStorage.getItem('troll_shits')||'0',10)||0;
+  var shitNumEl=$('#shitnum'); if(shitNumEl) shitNumEl.textContent=SHITS.toLocaleString();
+  function bumpShits(){ SHITS++; try{localStorage.setItem('troll_shits',String(SHITS));}catch(e){}
+    if(shitNumEl){ shitNumEl.textContent=SHITS.toLocaleString(); var sc=$('#shitcount'); if(sc){ sc.classList.remove('pop'); void sc.offsetWidth; sc.classList.add('pop'); } } }
 
   render();
 
