@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>THE HALL OF TROLLS &mdash; TROLLCAT</title>
+<meta name="description" content="Walk the Hall of Trolls: a museum of TROLLCAT masterpieces on Robinhood Chain. The final exhibit is you." />
+<link rel="icon" type="image/png" href="assets/img/icon.png" />
+<meta property="og:title" content="THE HALL OF TROLLS &mdash; TROLLCAT" />
+<meta property="og:description" content="A museum of TROLLCAT. The greatest troll of all time is waiting in the last frame. (it's you.)" />
+<meta property="og:image" content="assets/og.jpg" />
+<meta name="theme-color" content="#05070a" />
+<style>
+:root{--void:#05070a;--panel:#0b110d;--bone:#eaf0e2;--fog:#93a089;--faint:#586552;
+  --tox:#b6ff2e;--tear:#bfeaff;--edge:#22301b;--gold:#f4c430;--gold2:#ffe38a;--goldd:#8a6a12;--down:#ff5a4d;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+  --disp:"Archivo Black","Arial Black",Impact,system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--void);color:var(--bone);font-family:var(--mono);overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+img,video{display:block;max-width:100%}
+::selection{background:var(--tox);color:#04140a}
+
+/* corridor backdrop */
+.hall{position:fixed;inset:0;overflow:hidden;
+  background:
+   radial-gradient(120% 70% at 50% 42%, rgba(182,255,46,.10), transparent 60%),
+   linear-gradient(#0a0f0b,#05070a 60%)}
+.hall::before{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;
+  background:linear-gradient(#070b08,#020403);
+  clip-path:polygon(0 100%,100% 100%,72% 0,28% 0);opacity:.9}
+.hall::after{content:"";position:absolute;left:0;right:0;top:0;height:26%;
+  background:linear-gradient(#0b120c,#05070a);
+  clip-path:polygon(28% 100%,72% 100%,100% 0,0 0);opacity:.8}
+.walls{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(3,6,4,.9),transparent 22%,transparent 78%,rgba(3,6,4,.9))}
+#dust{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.6}
+.scan{position:absolute;inset:0;z-index:40;pointer-events:none;mix-blend-mode:overlay;opacity:.5;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.5) 0 1px,transparent 1px 3px)}
+.vig{position:absolute;inset:0;z-index:41;pointer-events:none;box-shadow:inset 0 0 240px 40px rgba(0,0,0,.85)}
+
+/* HUD */
+.hud{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;gap:14px;
+  padding:14px 18px;padding-top:calc(14px + env(safe-area-inset-top))}
+.home{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;color:var(--tox);
+  border:1px solid rgba(182,255,46,.4);border-radius:9px;padding:.42rem .7rem;background:rgba(5,9,6,.6);backdrop-filter:blur(6px);transition:.15s}
+.home:hover{background:rgba(182,255,46,.12);color:#fff}
+.hud .title{font-family:var(--disp);letter-spacing:.02em;font-size:clamp(.95rem,2.4vw,1.35rem);
+  text-shadow:0 0 20px rgba(182,255,46,.35);flex:1;text-align:center}
+.hud .title b{color:var(--tox)}
+.hud .tk{font-family:var(--mono);font-weight:700;font-size:.8rem;color:var(--gold);border:1px solid rgba(244,196,48,.35);
+  border-radius:9px;padding:.42rem .6rem;background:rgba(5,9,6,.6);white-space:nowrap}
+
+/* the rail */
+.rail{position:absolute;inset:0;z-index:10;display:flex;align-items:center;gap:clamp(28px,6vw,90px);
+  padding:0 max(6vw,60px);overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;cursor:grab}
+.rail::-webkit-scrollbar{display:none}
+.rail.drag{cursor:grabbing;scroll-snap-type:none}
+.intro,.outro{flex:0 0 auto;width:min(78vw,520px);scroll-snap-align:center;text-align:center;padding:0 10px}
+.intro h1{font-family:var(--disp);font-size:clamp(2rem,7vw,4.2rem);line-height:.95;margin:0 0 14px;
+  text-shadow:0 0 30px rgba(182,255,46,.3)}
+.intro h1 b{color:var(--tox)}
+.intro p,.outro p{color:var(--fog);font-size:clamp(.85rem,2.2vw,1rem);line-height:1.6;margin:8px auto;max-width:44ch}
+.intro .go{margin-top:16px;display:inline-flex;gap:.5em;align-items:center;color:var(--tox);font-size:.8rem;letter-spacing:.1em}
+.intro .go .ar{animation:nudge 1.3s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(6px)}}
+
+/* an exhibit */
+.ex{flex:0 0 auto;scroll-snap-align:center;position:relative;display:flex;flex-direction:column;align-items:center;
+  width:clamp(240px,42vw,460px)}
+.ex .spot{position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:70%;height:120px;pointer-events:none;
+  background:radial-gradient(60% 100% at 50% 0,rgba(255,240,190,.28),transparent 70%)}
+.frame{position:relative;border-radius:6px;padding:clamp(10px,1.6vw,18px);
+  background:linear-gradient(150deg,var(--gold2),var(--gold) 40%,var(--goldd));
+  box-shadow:0 30px 60px -24px #000, 0 0 0 2px rgba(0,0,0,.35) inset, 0 0 34px rgba(244,196,48,.18);
+  transition:transform .3s, box-shadow .3s}
+.ex:hover .frame{transform:translateY(-8px);box-shadow:0 40px 80px -26px #000,0 0 46px rgba(244,196,48,.34)}
+.frame .mat{background:#0a0d08;border:1px solid rgba(0,0,0,.6);padding:6px;border-radius:2px;overflow:hidden}
+.frame .art{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#070b07;border-radius:1px}
+.frame.wide .art{aspect-ratio:16/10}
+.plaque{margin-top:16px;background:linear-gradient(180deg,#c9a24a,#8a6a12);color:#1a1405;border-radius:5px;
+  padding:.5rem .8rem;text-align:center;box-shadow:0 8px 18px -8px #000, inset 0 1px 0 rgba(255,255,255,.4);max-width:92%}
+.plaque .n{font-family:var(--mono);font-weight:700;font-size:.62rem;letter-spacing:.18em}
+.plaque .t{font-family:var(--disp);font-size:.9rem;letter-spacing:.02em;margin:2px 0}
+.plaque .d{font-family:var(--mono);font-size:.66rem;opacity:.82;line-height:1.4}
+
+/* mirror finale */
+.ex.mirror .frame{background:linear-gradient(150deg,#fff2c0,var(--gold) 45%,#6d520c);
+  box-shadow:0 40px 90px -20px #000,0 0 60px rgba(244,196,48,.4)}
+.mirror-stage{position:relative;width:100%;aspect-ratio:1/1;background:radial-gradient(circle at 50% 40%,#0e160e,#040704);
+  border-radius:1px;overflow:hidden;display:grid;place-items:center}
+.mirror-stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:contrast(1.05) saturate(1.05) hue-rotate(-6deg)}
+.mirror-stage .tint{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,transparent,rgba(10,40,10,.5));mix-blend-mode:multiply;pointer-events:none}
+.mirror-stage .grin{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:82%;opacity:0;pointer-events:none;
+  mix-blend-mode:screen;transition:opacity .8s;filter:drop-shadow(0 0 20px rgba(182,255,46,.5))}
+.mirror-stage.on .grin{opacity:.5}
+.mirror-stage .cover{position:absolute;inset:0;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;
+  text-align:center;padding:20px;background:radial-gradient(circle at 50% 40%,#0f1a0f,#040704);transition:opacity .5s;z-index:3}
+.mirror-stage.on .cover{opacity:0;pointer-events:none}
+.mirror-stage .cover .q{font-family:var(--disp);font-size:clamp(2.4rem,9vw,5rem);color:var(--gold);text-shadow:0 0 30px rgba(244,196,48,.4);line-height:1}
+.reveal-btn{font-family:var(--mono);font-weight:700;font-size:.8rem;letter-spacing:.04em;color:#04140a;
+  background:linear-gradient(180deg,var(--gold2),var(--gold));border-radius:10px;padding:.7rem 1.1rem;
+  box-shadow:0 10px 26px -10px rgba(244,196,48,.7)}
+.reveal-btn:hover{filter:brightness(1.07);transform:translateY(-2px)}
+.priv{font-family:var(--mono);font-size:.6rem;color:var(--faint);max-width:26ch;line-height:1.4}
+.mirror-scan{position:absolute;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity .8s;
+  background:repeating-linear-gradient(0deg,rgba(182,255,46,.08) 0 2px,transparent 2px 4px)}
+.mirror-stage.on .mirror-scan{opacity:1}
+
+/* nav + progress */
+.arrows{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:60;
+  display:flex;align-items:center;gap:12px}
+.arrows button{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:var(--tox);
+  border:1px solid rgba(182,255,46,.4);background:rgba(5,9,6,.7);backdrop-filter:blur(6px);transition:.15s}
+.arrows button:hover{background:rgba(182,255,46,.14);color:#fff}
+.count{font-family:var(--mono);font-size:.74rem;color:var(--fog);min-width:74px;text-align:center;letter-spacing:.08em}
+.count b{color:var(--tox)}
+.hintbar{position:fixed;bottom:calc(76px + env(safe-area-inset-bottom));left:0;right:0;z-index:55;text-align:center;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);pointer-events:none}
+
+@media(max-width:640px){
+  .ex{width:76vw}
+  .hall::before,.hall::after{clip-path:none}
+  .hud .tk{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rail{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="hall">
+  <div class="walls"></div>
+  <canvas id="dust"></canvas>
+</div>
+
+<header class="hud">
+  <a class="home" href="index.html">&lsaquo; back to TROLLCAT WORLD</a>
+  <div class="title">THE HALL OF <b>TROLLS</b></div>
+  <a class="tk" href="litterbox.html">$TROLLCAT</a>
+</header>
+
+<div class="rail" id="rail">
+  <div class="intro">
+    <h1>THE HALL OF <b>TROLLS</b></h1>
+    <p>A museum of the finest TROLLCAT masterpieces ever committed to the blockchain of the heart. Priceless. Worthless. Both.</p>
+    <p class="dim" style="color:var(--faint)">Every frame is a legend. The last frame is a warning.</p>
+    <span class="go">walk the hall <span class="ar">&rarr;</span></span>
+  </div>
+  <!-- exhibits injected here -->
+  <div class="outro" id="outro">
+    <h1 style="font-size:clamp(1.6rem,6vw,3rem)">END OF <b>HALL</b></h1>
+    <p>You walked past every troll and the greatest one was in the mirror. There was never any art, ser. Only you. gm.</p>
+    <a class="home" style="margin-top:14px;display:inline-block" href="litterbox.html">go judge the other coins &rarr;</a>
+  </div>
+</div>
+
+<div class="hintbar" id="hintbar">scroll &middot; drag &middot; or use the arrows to walk the hall</div>
+
+<nav class="arrows">
+  <button id="prev" aria-label="Previous">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <span class="count" id="count">00 / 00</span>
+  <button id="next" aria-label="Next">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
+</nav>
+
+<div class="scan"></div><div class="vig"></div>
+
+<script>
+(function(){
+  var $=function(s,r){return (r||document).querySelector(s);};
+  // ---- exhibits. Drop files at assets/memes/*.jpg and the "user" ones appear automatically. ----
+  var EX=[
+    {img:'assets/img/meme_king.png',      n:'No. I',   t:'KING OF THE LITTER', d:'oil on cardboard box · 2026 · the throne was always cash'},
+    {img:'assets/img/meme_trader.png',    n:'No. II',  t:'THE ANALYST',        d:'he does not read charts. he IS the chart.'},
+    {img:'assets/img/meme_moon.png',      n:'No. III', t:'ASCENSION',          d:'destination: unclear · vibes: immaculate'},
+    {img:'assets/img/meme_diamond.png',   n:'No. IV',  t:'DIAMOND PAWS',       d:'pried from the hands of the weak'},
+    {video:'assets/splash.mp4', wide:true, n:'No. V',  t:'THE ORIGIN TAPE',    d:'now showing · on loop · forever'},
+    {img:'assets/img/troll_challenger.png',n:'No. VI', t:'THE CHALLENGER',     d:'#1 loading... budge up, ser'},
+    {img:'assets/img/hero_scene.png', wide:false, n:'No. VII', t:'OLD MONEY',  d:'beige cat · green terminal · zero explanation'},
+    {img:'assets/img/mascot.png',         n:'No. VIII',t:'SELF-PORTRAIT',      d:'the grin that has ruined timelines since 2008'},
+    // ---- your uploads (missing files auto-hide) ----
+    {img:'assets/memes/tattoo-parlor.jpg', wide:true, user:1, n:'No. IX', t:'BUTT NEVER LIES', d:'troll ink · market manipulated · the tramp stamp of a free man'},
+    {img:'assets/memes/1.jpg', user:1, n:'No. X',  t:'COMMUNITY GRIN', d:'submitted by a certified troll'},
+    {img:'assets/memes/2.jpg', user:1, n:'No. XI', t:'COMMUNITY GRIN', d:'submitted by a certified troll'},
+    {img:'assets/memes/3.jpg', user:1, n:'No. XII',t:'COMMUNITY GRIN', d:'submitted by a certified troll'},
+    {img:'assets/memes/4.jpg', user:1, n:'No. XIII',t:'COMMUNITY GRIN', d:'submitted by a certified troll'},
+    {mirror:1}
+  ];
+  var rail=$('#rail'), outro=$('#outro');
+  var plate = function(n,t,d){ return '<div class="plaque"><div class="n">'+n+'</div><div class="t">'+t+'</div><div class="d">'+d+'</div></div>'; };
+
+  EX.forEach(function(e){
+    var el=document.createElement('div'); el.className='ex'+(e.mirror?' mirror':'');
+    if(e.mirror){
+      el.innerHTML='<span class="spot"></span><div class="frame">'+
+        '<div class="mirror-stage" id="mstage">'+
+          '<video id="mvid" autoplay muted playsinline></video>'+
+          '<img class="grin" src="assets/img/mascot.png" alt="">'+
+          '<div class="mirror-scan"></div><div class="tint"></div>'+
+          '<div class="cover"><div class="q">?</div>'+
+            '<button class="reveal-btn" id="revealBtn">tap to meet the greatest troll of all time</button>'+
+            '<div class="priv">your camera never leaves your device. we\'re trolls, not creeps.</div>'+
+          '</div>'+
+        '</div>'+
+        '</div>'+
+        plate('FINAL EXHIBIT','THE GREATEST TROLL OF ALL TIME','unveiled today · medium: you · not for sale');
+    } else {
+      var media = e.video
+        ? '<video class="art" src="'+e.video+'" autoplay muted loop playsinline preload="metadata"></video>'
+        : '<img class="art" src="'+e.img+'" alt="'+e.t+'" loading="lazy" decoding="async">';
+      el.innerHTML='<span class="spot"></span><div class="frame'+(e.wide?' wide':'')+'"><div class="mat">'+media+'</div></div>'+plate(e.n,e.t,e.d);
+      if(e.user && !e.video){ var im=el.querySelector('img.art'); im.addEventListener('error',function(){ el.remove(); relabel(); }); }
+    }
+    rail.insertBefore(el, outro);
+  });
+
+  // ---- count + navigation ----
+  var count=$('#count');
+  function cards(){ return [].slice.call(rail.querySelectorAll('.ex')); }
+  function relabel(){ /* numbering is decorative; nothing to renumber */ updateCount(); }
+  function centerIndex(){ var c=cards(); var mid=rail.scrollLeft+rail.clientWidth/2, best=0, bd=1e9;
+    c.forEach(function(el,i){ var x=el.offsetLeft+el.offsetWidth/2, dd=Math.abs(x-mid); if(dd<bd){bd=dd;best=i;} }); return best; }
+  function updateCount(){ var c=cards(); if(!c.length){count.textContent='';return;} var i=centerIndex();
+    count.innerHTML='<b>'+String(i+1).padStart(2,'0')+'</b> / '+String(c.length).padStart(2,'0'); }
+  function go(dir){ var c=cards(); if(!c.length)return; var i=Math.max(0,Math.min(c.length-1,centerIndex()+dir));
+    c[i].scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}); }
+  $('#next').addEventListener('click',function(){go(1);});
+  $('#prev').addEventListener('click',function(){go(-1);});
+  rail.addEventListener('scroll',function(){ updateCount(); var hb=$('#hintbar'); if(hb&&rail.scrollLeft>40){hb.style.opacity='0';} }, {passive:true});
+  window.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'){go(1);} else if(e.key==='ArrowLeft'){go(-1);} });
+  // wheel -> horizontal
+  rail.addEventListener('wheel',function(e){ if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){ rail.scrollLeft+=e.deltaY; e.preventDefault(); } }, {passive:false});
+  // drag to pan
+  var down=false,sx=0,sl=0,moved=0;
+  rail.addEventListener('pointerdown',function(e){ down=true;moved=0;sx=e.clientX;sl=rail.scrollLeft;rail.classList.add('drag'); });
+  window.addEventListener('pointermove',function(e){ if(!down)return; var dx=e.clientX-sx; moved+=Math.abs(dx); rail.scrollLeft=sl-dx; });
+  window.addEventListener('pointerup',function(){ if(!down)return; down=false;rail.classList.remove('drag'); });
+  setTimeout(updateCount,60); window.addEventListener('resize',updateCount);
+
+  // ---- the mirror ----
+  var revealBtn=$('#revealBtn');
+  if(revealBtn){
+    revealBtn.addEventListener('click',function(){
+      var stage=$('#mstage'), vid=$('#mvid'), q=stage.querySelector('.q');
+      var fail=function(msg){ stage.classList.add('on'); q.style.opacity=0;
+        var cov=stage.querySelector('.cover'); cov.innerHTML='<img src="assets/img/icon.png" style="width:60%;border-radius:12px;box-shadow:0 0 30px rgba(182,255,46,.4)"><div class="priv" style="font-size:.72rem;color:var(--bone)">'+msg+'</div>';
+        cov.style.opacity='1'; cov.style.pointerEvents='none'; };
+      if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ fail('camera shy? the cat sees you anyway. you\'re still the exhibit.'); return; }
+      revealBtn.textContent='unveiling...';
+      navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false}).then(function(stream){
+        vid.srcObject=stream; vid.play&&vid.play(); stage.classList.add('on');
+      }).catch(function(){ fail('the cat respects your privacy. but you and i both know who the real troll is.'); });
+    });
+  }
+
+  // ---- ambient green dust ----
+  (function(){ var c=$('#dust'); if(!c||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;
+    var x=c.getContext('2d'),ps=[];function rz(){c.width=innerWidth;c.height=innerHeight;}rz();addEventListener('resize',rz);
+    for(var i=0;i<46;i++)ps.push({x:Math.random(),y:Math.random(),s:0.4+Math.random()*1.4,v:0.02+Math.random()*0.05});
+    var last=0;(function lp(t){requestAnimationFrame(lp);if(t-last<50)return;last=t;x.clearRect(0,0,c.width,c.height);
+      for(var i=0;i<ps.length;i++){var p=ps[i];p.y-=p.v/100;if(p.y<0){p.y=1;p.x=Math.random();}
+        x.beginPath();x.arc(p.x*c.width,p.y*c.height,p.s,0,6.28);x.fillStyle='rgba(182,255,46,'+(0.12+p.s*0.12)+')';x.fill();}})(0);
+  })();
+})();
+</script>
+</body>
+</html>
