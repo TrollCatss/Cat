@@ -147,7 +147,9 @@ body.trollmode #cam{animation:tmode .5s steps(2) infinite}
 #sound{position:fixed;left:50%;bottom:64px;transform:translateX(-50%);z-index:9002;font-family:var(--mono);font-weight:700;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:#0a0d06;background:var(--tox);border:none;padding:.6rem 1.1rem;cursor:pointer;animation:sndpulse 1.4s infinite}
 @keyframes sndpulse{50%{box-shadow:0 0 24px rgba(182,255,46,.7);transform:translateX(-50%) scale(1.05)}}
 .litpet{position:absolute;z-index:5;width:54px;margin:-48px 0 0 -27px;pointer-events:none;transition:left var(--wt,1.6s) linear, top var(--wt,1.6s) linear;will-change:left,top}
+#island .litpet .flip{display:block;transform-origin:50% 100%;will-change:transform}
 #island .litpet .body{width:100%;height:auto;display:block;transform-origin:50% 100%;filter:drop-shadow(0 4px 4px rgba(0,0,0,.45))}
+@keyframes hopb{0%{transform:translateY(0) scaleY(1)}38%{transform:translateY(-8px) scaleY(1.05)}72%{transform:translateY(0) scaleY(.92)}100%{transform:translateY(0) scaleY(1)}}
 .turdpile{position:absolute;width:20px;height:20px;margin:-15px 0 0 -10px;z-index:4;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4));animation:plop .5s cubic-bezier(.3,1.5,.5,1) both, tfade 7s linear forwards}
 .turdpile svg{width:100%;height:auto;display:block}
 @keyframes plop{0%{transform:translateY(-9px) scale(.3)}60%{transform:translateY(0) scale(1.12)}100%{transform:translateY(0) scale(1)}}
@@ -350,32 +352,39 @@ body.trollmode #cam{animation:tmode .5s steps(2) infinite}
 (function(){
   var island=document.getElementById('island'); if(!island) return;
   var POOP='<svg viewBox="0 0 64 60" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="56" rx="20" ry="3.5" fill="#00000040"/><path d="M32 8 C40 8 45 14 44 20 C52 20 58 26 56 33 C60 36 62 42 58 47 C60 52 55 58 46 58 L18 58 C9 58 4 52 6 47 C2 42 4 36 8 33 C6 26 12 20 20 20 C19 14 24 8 32 8 Z" fill="#6b4a2a" stroke="#3f2a16" stroke-width="2"/><ellipse cx="25" cy="34" rx="6" ry="6.5" fill="#f4efe6"/><ellipse cx="40" cy="34" rx="6" ry="6.5" fill="#f4efe6"/><circle cx="26" cy="35" r="2.4" fill="#141210"/><circle cx="39" cy="35" r="2.4" fill="#141210"/><path d="M22 44 Q32 52 43 44" fill="none" stroke="#141210" stroke-width="2" stroke-linecap="round"/></svg>';
-  // -- a real mini TROLLCAT wanders the litterbox and shits (Venice sprite) --
+  // -- a real mini TROLLCAT HOPS around the litterbox and shits (Venice sprite) --
   var pet=document.createElement('div'); pet.className='litpet';
+  var flip=document.createElement('div'); flip.className='flip';
   var body=document.createElement('img'); body.className='body'; body.src='assets/img/tcat_walk.png'; body.alt='';
-  pet.appendChild(body); island.appendChild(pet);
-  var RX=[510,712], RY=[420,498], cx=612, cy=458, facing=1;
+  flip.appendChild(body); pet.appendChild(flip); island.appendChild(pet);
+  var RX=[510,712], RY=[420,498], cx=612, cy=458, facing=1, HOP=270, STEPPX=20;
   function pdepth(y){ return 0.80 + (y-RY[0])/(RY[1]-RY[0])*0.26; }
-  function pface(dir,sc){ body.style.transform='scale('+(dir*sc).toFixed(3)+','+sc.toFixed(3)+')'; }
+  function setFlip(dir,sc){ flip.style.transform='scale('+(dir*sc).toFixed(3)+','+sc.toFixed(3)+')'; }
   function pplace(x,y){ pet.style.left=x+'px'; pet.style.top=y+'px'; }
-  pplace(cx,cy); pface(facing,pdepth(cy));
+  function hopOnce(){ body.style.animation='none'; void body.offsetWidth; body.style.animation='hopb '+HOP+'ms ease-out'; }
   function prnd(a,b){ return a+Math.random()*(b-a); }
+  pplace(cx,cy); setFlip(facing,pdepth(cy));
+  function hopTo(nx,ny,done){
+    if(document.hidden){ setTimeout(function(){ hopTo(nx,ny,done); }, 400); return; }
+    var dx=nx-cx, dy=ny-cy, d=Math.sqrt(dx*dx+dy*dy);
+    if(d<7){ body.style.animation='none'; done&&done(); return; }
+    var stp=Math.min(STEPPX,d), tx=cx+dx/d*stp, ty=cy+dy/d*stp;
+    facing=(dx>0)?-1:1; setFlip(facing,pdepth(ty));
+    pet.style.setProperty('--wt',(HOP/1000)+'s'); pplace(tx,ty); cx=tx; cy=ty; hopOnce();
+    setTimeout(function(){ hopTo(nx,ny,done); }, HOP);
+  }
   function pshit(){
-    body.src='assets/img/tcat_squat.png'; pface(facing,pdepth(cy));
+    body.style.animation='none'; body.src='assets/img/tcat_squat.png'; setFlip(facing,pdepth(cy));
     setTimeout(function(){ if(document.hidden) return; var t=document.createElement('div'); t.className='turdpile';
       t.style.left=(cx+facing*13)+'px'; t.style.top=(cy-3)+'px'; t.innerHTML=POOP; island.appendChild(t);
-      setTimeout(function(){ t.parentNode&&t.parentNode.removeChild(t); }, 7300); }, 820);
-    setTimeout(function(){ body.src='assets/img/tcat_walk.png'; pface(facing,pdepth(cy)); pstep(); }, 1600);
+      setTimeout(function(){ t.parentNode&&t.parentNode.removeChild(t); }, 7300); }, 780);
+    setTimeout(function(){ body.src='assets/img/tcat_walk.png'; setFlip(facing,pdepth(cy)); wander(); }, 1550);
   }
-  function pstep(){
-    if(document.hidden){ setTimeout(pstep,1500); return; }
-    var nx=prnd(RX[0],RX[1]), ny=prnd(RY[0],RY[1]), dx=nx-cx, dy=ny-cy, dist=Math.sqrt(dx*dx+dy*dy);
-    facing=(dx>0)?-1:1; var sc=pdepth(ny); pface(facing,sc);
-    var dur=Math.max(0.9, dist/72); pet.style.setProperty('--wt', dur.toFixed(2)+'s');
-    pplace(nx,ny); cx=nx; cy=ny;
-    setTimeout(function(){ if(Math.random()<0.55){ pshit(); } else { setTimeout(pstep, 500+Math.random()*1000); } }, dur*1000+80);
+  function wander(){
+    var nx=prnd(RX[0],RX[1]), ny=prnd(RY[0],RY[1]);
+    hopTo(nx,ny,function(){ if(Math.random()<0.55){ pshit(); } else { setTimeout(wander, 450+Math.random()*900); } });
   }
-  setTimeout(pstep, 1400);
+  setTimeout(wander, 1200);
 })();
 </script>
 <script>

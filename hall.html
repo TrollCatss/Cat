@@ -125,13 +125,17 @@ img,video{display:block;max-width:100%}
 @keyframes nudge{50%{transform:translateY(6px)}}
 
 /* nav */
-.arrows{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:60;
-  display:flex;align-items:center;gap:12px}
-.arrows button{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;color:var(--tox);
-  border:1px solid rgba(182,255,46,.4);background:rgba(5,9,6,.72);backdrop-filter:blur(6px);transition:.15s}
-.arrows button:hover{background:rgba(182,255,46,.14);color:#fff}
-.arrows button:active{transform:scale(.94)}
-.arrows .walk{width:64px;font-family:var(--disp);font-size:.66rem;letter-spacing:.02em}
+.reticle{position:fixed;left:50%;top:45%;z-index:50;width:22px;height:22px;transform:translate(-50%,-50%);pointer-events:none;
+  border:1.5px solid rgba(182,255,46,.4);border-radius:50%;box-shadow:0 0 10px rgba(182,255,46,.25),inset 0 0 8px rgba(182,255,46,.14);opacity:.9}
+.reticle:before{content:"";position:absolute;left:50%;top:50%;width:3px;height:3px;transform:translate(-50%,-50%);border-radius:50%;background:var(--tox);box-shadow:0 0 6px var(--tox)}
+.drive{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);z-index:60;
+  display:flex;flex-direction:column;align-items:center;gap:7px;user-select:none}
+.drow{display:flex;gap:8px}
+.mv{width:56px;height:46px;border-radius:12px;display:grid;place-items:center;color:var(--tox);
+  border:1px solid rgba(182,255,46,.4);background:rgba(5,9,6,.72);backdrop-filter:blur(6px);transition:background .12s,transform .12s;touch-action:none}
+.mv:hover{background:rgba(182,255,46,.14);color:#fff}
+.mv:active{background:rgba(182,255,46,.28);transform:scale(.95)}
+.mv.f{width:124px}
 .count{font-family:var(--mono);font-size:.74rem;color:var(--fog);min-width:70px;text-align:center;letter-spacing:.08em}
 .count b{color:var(--tox)}
 .hintbar{position:fixed;bottom:calc(82px + env(safe-area-inset-bottom));left:0;right:0;z-index:55;text-align:center;
@@ -174,17 +178,19 @@ img,video{display:block;max-width:100%}
   <span class="go">walk forward <span class="ar">&darr;</span></span>
 </div>
 
-<div class="hintbar" id="hintbar">scroll or drag to walk &middot; &larr; &rarr; jump &middot; the end is a mirror</div>
+<div class="hintbar" id="hintbar">drag to look &middot; W A S D / arrows to move &middot; click to lock the mouse &middot; the end is a mirror</div>
 
-<nav class="arrows">
-  <button id="prev" aria-label="Previous">
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg>
-  </button>
-  <span class="count" id="count">00 / 00</span>
-  <button id="next" aria-label="Next">
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>
-  </button>
-</nav>
+<div class="reticle" aria-hidden="true"></div>
+
+<div class="drive">
+  <button class="mv f" id="mf" aria-label="Move forward"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5l-7 7M12 5l7 7M12 5v14"/></svg></button>
+  <div class="drow">
+    <button class="mv" id="ml" aria-label="Turn left"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button class="mv" id="mb" aria-label="Move back"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7M12 19l-7-7M12 19V5"/></svg></button>
+    <button class="mv" id="mr" aria-label="Turn right"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+  <span class="count" id="count">00% in</span>
+</div>
 
 <script>
 (function(){
@@ -264,49 +270,72 @@ img,video{display:block;max-width:100%}
   mel.style.transform='translate3d(0px,0px,'+mirrorZ+'px) rotateY(0deg) translate(-50%,-50%)';
   world.appendChild(mel);
 
-  // ---- movement (walk the hall) ----
-  var pos=0, target=0;
-  var posMax=-mirrorZ-560;
-  function clamp(v){ return Math.max(0, Math.min(posMax, v)); }
-  function bayPos(b){ b=Math.max(0,Math.min(bays-1,b)); return clamp(-(FIRST+STEP*b)-360); }
-  function curBay(){ return Math.max(0,Math.min(bays-1, Math.round((-(pos+360)-FIRST)/STEP))); }
-  var count=$('#count'), enter=$('#enter'), hintbar=$('#hintbar');
+  // ---- free-roam first-person camera (mouse-look + WASD + strafe) ----
+  var stage=$('#stage'), enter=$('#enter'), hintbar=$('#hintbar'), count=$('#count');
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var XLIM=HALF-42, ZMIN=mirrorZ+150, ZMAX=140;
+  var cam={x:0,y:0,z:ZMAX-10,yaw:0,pitch:0}, vel={x:0,z:0}, keys={}, bobp=0, engaged=false;
+  var SPEED=8.6, TURN=2.1, LOOK=0.16, ACC=0.2, padMove=0, padTurn=0;
 
-  function frame(){
-    pos += (target-pos)*(reduce?1:0.11);
-    if(Math.abs(target-pos)<0.4) pos=target;
-    world.style.transform='translateZ('+pos.toFixed(2)+'px)';
-    var b=curBay();
-    count.innerHTML='<b>'+String(b+1).padStart(2,'0')+'</b> / '+String(bays).padStart(2,'0');
-    if(pos>140){ enter.classList.add('gone'); hintbar.style.opacity='0'; }
-    else { enter.classList.remove('gone'); hintbar.style.opacity=''; }
-    requestAnimationFrame(frame);
+  function render(){
+    var sp=Math.sqrt(vel.x*vel.x+vel.z*vel.z);
+    if(!reduce) bobp+=sp*0.05;
+    var by=Math.sin(bobp)*Math.min(3.0,sp*0.5), roll=Math.sin(bobp*0.5)*Math.min(0.6,sp*0.08);
+    world.style.transform='rotateZ('+roll.toFixed(3)+'deg) rotateX('+(-cam.pitch).toFixed(3)+'deg) rotateY('+(-cam.yaw).toFixed(3)+'deg) translate3d('+(-cam.x).toFixed(2)+'px,'+(-(cam.y+by)).toFixed(2)+'px,'+(-cam.z).toFixed(2)+'px)';
+    var prog=Math.max(0,Math.min(100,Math.round((ZMAX-cam.z)/(ZMAX-ZMIN)*100)));
+    count.innerHTML='<b>'+String(prog).padStart(2,'0')+'</b>% in';
+    if(!engaged && (cam.z<ZMAX-40 || Math.abs(cam.yaw)>3 || Math.abs(cam.pitch)>3 || sp>0.6)){
+      engaged=true; enter.classList.add('gone'); hintbar.style.opacity='0'; }
   }
-  requestAnimationFrame(frame);
+  function tick(){
+    var mv=padMove, st=0, tn=padTurn;
+    if(keys['w']||keys['arrowup'])mv+=1;
+    if(keys['s']||keys['arrowdown'])mv-=1;
+    if(keys['a'])st-=1; if(keys['d'])st+=1;
+    if(keys['q']||keys['arrowleft'])tn-=1;
+    if(keys['e']||keys['arrowright'])tn+=1;
+    cam.yaw+=tn*TURN;
+    var ya=cam.yaw*Math.PI/180, fx=Math.sin(ya), fz=-Math.cos(ya), rx=Math.cos(ya), rz=Math.sin(ya);
+    var tvx=(fx*mv+rx*st)*SPEED, tvz=(fz*mv+rz*st)*SPEED;
+    vel.x+=(tvx-vel.x)*ACC; vel.z+=(tvz-vel.z)*ACC;
+    cam.x+=vel.x; cam.z+=vel.z;
+    if(cam.x<-XLIM){cam.x=-XLIM;vel.x=0;} if(cam.x>XLIM){cam.x=XLIM;vel.x=0;}
+    if(cam.z<ZMIN){cam.z=ZMIN;vel.z=0;} if(cam.z>ZMAX){cam.z=ZMAX;vel.z=0;}
+    render(); requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 
-  // wheel -> walk
-  var stage=$('#stage');
-  window.addEventListener('wheel',function(e){ target=clamp(target + e.deltaY*0.9); e.preventDefault(); }, {passive:false});
-  // keys
-  window.addEventListener('keydown',function(e){
-    var k=e.key;
-    if(k==='ArrowUp'||k==='w'||k==='W'||k==='PageDown'){ target=clamp(target+320); e.preventDefault(); }
-    else if(k==='ArrowDown'||k==='s'||k==='S'||k==='PageUp'){ target=clamp(target-320); e.preventDefault(); }
-    else if(k==='ArrowRight'||k==='d'||k==='D'){ target=bayPos(curBay()+1); }
-    else if(k==='ArrowLeft'||k==='a'||k==='A'){ target=bayPos(curBay()-1); }
-    else if(k==='Home'){ target=0; } else if(k==='End'){ target=posMax; }
+  // keyboard
+  window.addEventListener('keydown',function(e){ var k=e.key.toLowerCase(); keys[k]=true;
+    if(['w','a','s','d','q','e','arrowup','arrowdown','arrowleft','arrowright'].indexOf(k)>=0) e.preventDefault();
+    if(k==='home'){ cam.x=0;cam.z=ZMAX-10;cam.yaw=0;cam.pitch=0; }
   });
-  // drag (swipe up = forward)
-  var down=false, sy=0, sp=0, moved=0;
-  stage.addEventListener('pointerdown',function(e){ if(e.target.closest('button,a')) return;
-    down=true;moved=0;sy=e.clientY;sp=target;stage.classList.add('grab'); });
-  window.addEventListener('pointermove',function(e){ if(!down)return; var dy=e.clientY-sy; moved+=Math.abs(dy);
-    target=clamp(sp - dy*1.6); });
-  window.addEventListener('pointerup',function(){ if(!down)return; down=false;stage.classList.remove('grab'); });
-  // buttons jump one bay
-  $('#next').addEventListener('click',function(){ target=bayPos(curBay()+1); });
-  $('#prev').addEventListener('click',function(){ target=bayPos(curBay()-1); });
+  window.addEventListener('keyup',function(e){ keys[e.key.toLowerCase()]=false; });
+  window.addEventListener('blur',function(){ keys={}; padMove=0; padTurn=0; });
+
+  // scroll = glide forward/back along the view direction
+  window.addEventListener('wheel',function(e){ var ya=cam.yaw*Math.PI/180, d=-e.deltaY*0.6;
+    cam.z+=-Math.cos(ya)*d; cam.x+=Math.sin(ya)*d;
+    cam.z=Math.max(ZMIN,Math.min(ZMAX,cam.z)); cam.x=Math.max(-XLIM,Math.min(XLIM,cam.x));
+    e.preventDefault(); }, {passive:false});
+
+  // look: drag anywhere, or pointer-lock the mouse (click)
+  var down=false,lx=0,ly=0,moved=0,locked=false;
+  function look(dx,dy){ cam.yaw+=dx*LOOK; cam.pitch-=dy*LOOK; if(cam.pitch>34)cam.pitch=34; if(cam.pitch<-34)cam.pitch=-34; }
+  stage.addEventListener('pointerdown',function(e){ if(e.target.closest('button,a'))return; down=true;moved=0;lx=e.clientX;ly=e.clientY;stage.classList.add('grab'); });
+  window.addEventListener('pointermove',function(e){ if(locked){ look(e.movementX||0,e.movementY||0); return; }
+    if(!down)return; var dx=e.clientX-lx,dy=e.clientY-ly; lx=e.clientX; ly=e.clientY; moved+=Math.abs(dx)+Math.abs(dy); look(dx,dy); });
+  window.addEventListener('pointerup',function(){ down=false; stage.classList.remove('grab'); });
+  stage.addEventListener('click',function(e){ if(e.target.closest('button,a'))return; if(moved>6)return;
+    if(stage.requestPointerLock) stage.requestPointerLock(); });
+  document.addEventListener('pointerlockchange',function(){ locked=(document.pointerLockElement===stage); });
+
+  // on-screen drive pad (hold to move)
+  function hold(id,on){ var el=$(id); if(!el)return; var clr=function(){ padMove=0; padTurn=0; };
+    el.addEventListener('pointerdown',function(e){ e.preventDefault(); on(); });
+    el.addEventListener('pointerup',clr); el.addEventListener('pointerleave',clr); el.addEventListener('pointercancel',clr); }
+  hold('#mf',function(){padMove=1;}); hold('#mb',function(){padMove=-1;});
+  hold('#ml',function(){padTurn=-1;}); hold('#mr',function(){padTurn=1;});
 
   // ---- the mirror reveal ----
   var revealBtn=$('#revealBtn');
