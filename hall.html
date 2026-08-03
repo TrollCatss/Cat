@@ -23,31 +23,32 @@ img,video{display:block;max-width:100%}
 ::selection{background:var(--tox);color:#04140a}
 
 /* ---- the 3D stage ---- */
-.stage{position:fixed;inset:0;overflow:hidden;perspective:1000px;perspective-origin:50% 53%;
+.stage{position:fixed;inset:0;overflow:hidden;perspective:1050px;perspective-origin:50% 50%;
   touch-action:none;cursor:grab;
   background:
-    radial-gradient(120% 80% at 50% 38%, rgba(182,255,46,.08), transparent 60%),
-    linear-gradient(#0a100b,#04070500 55%),
-    #04060a}
+    radial-gradient(120% 80% at 50% 42%, rgba(182,255,46,.10), transparent 60%),
+    linear-gradient(#12201a,#0a130d 60%),
+    #0a130d}
 .stage.grab{cursor:grabbing}
 .world{position:absolute;left:50%;top:50%;transform-style:preserve-3d;will-change:transform;
   transform:translateZ(0)}
-.plane{position:absolute;left:0;top:0;pointer-events:none;transform-style:flat;background-color:#060a07}
+.plane{position:absolute;left:0;top:0;pointer-events:none;transform-style:flat;background-color:#12201a}
 
 /* corridor surfaces (dimensions + transforms set in JS) */
 .floor{background:
-  linear-gradient(90deg, transparent 45%, rgba(182,255,46,.06) 50%, transparent 55%),
-  repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 2px, transparent 2px 132px),
-  repeating-linear-gradient(90deg, rgba(0,0,0,.35) 0 1px, transparent 1px 60px),
-  linear-gradient(#0a110b,#060b07)}
+  linear-gradient(90deg, transparent 40%, rgba(182,255,46,.12) 50%, transparent 60%),
+  repeating-linear-gradient(0deg, rgba(200,255,170,.07) 0 2px, transparent 2px 110px),
+  repeating-linear-gradient(90deg, rgba(0,0,0,.42) 0 2px, transparent 2px 90px),
+  linear-gradient(180deg,#20342476,#16281b 40%,#101f15)}
 .ceil{background:
   repeating-linear-gradient(0deg, rgba(182,255,46,0) 0 190px, rgba(182,255,46,.44) 190px 214px, rgba(182,255,46,0) 214px 220px),
   linear-gradient(90deg, transparent 34%, rgba(182,255,46,.10) 50%, transparent 66%),
   linear-gradient(#14231a,#0a120c)}
 .wallL,.wallR{background:
-  repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 3px, transparent 3px 210px),
-  linear-gradient(90deg, rgba(4,7,5,.96), rgba(9,14,10,.86) 30%, rgba(9,14,10,.86) 70%, rgba(4,7,5,.96)),
-  linear-gradient(180deg, rgba(10,16,11,.9), rgba(4,7,5,.98))}
+  linear-gradient(180deg, rgba(244,196,48,.10) 0 3px, transparent 3px 24%, rgba(244,196,48,.12) 24% 26%, transparent 26% 90%, rgba(6,11,8,.6) 90% 100%),
+  repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 3px, transparent 3px 190px),
+  linear-gradient(90deg, rgba(12,18,13,.96), rgba(26,36,27,.92) 30%, rgba(26,36,27,.92) 70%, rgba(12,18,13,.96)),
+  linear-gradient(180deg, rgba(30,42,30,.96), rgba(13,20,14,.98))}
 .endwall{background:
   radial-gradient(60% 60% at 50% 46%, rgba(182,255,46,.16), transparent 70%),
   linear-gradient(180deg,#0b130d,#050806);
@@ -237,7 +238,7 @@ img,video{display:block;max-width:100%}
   ];
 
   // ---- corridor geometry ----
-  var HALF=450, FLOOR=350, CEIL=-350, FIRST=-1080, STEP=-760, TILT=74;
+  var HALF=600, FLOOR=440, CEIL=-440, FIRST=-1080, STEP=-800, TILT=72;
   var items=EX.filter(function(e){return !e.mirror;});
   var bays=Math.ceil(items.length/2);
   var mirrorZ=FIRST+STEP*bays-160;           // far end
@@ -290,7 +291,7 @@ img,video{display:block;max-width:100%}
   // ---- decor: fill the hall (carpet runner + wall sconces between frames) ----
   (function(){
     var rug=document.createElement('div'); rug.className='plane rug';
-    rug.style.width='210px'; rug.style.height=CL+'px';
+    rug.style.width='380px'; rug.style.height=CL+'px';
     rug.style.transform='translate3d(0px,'+(FLOOR-2)+'px,'+midZ+'px) rotateX(90deg) translate(-50%,-50%)';
     world.appendChild(rug);
     for(var b=0;b<=bays;b++){
@@ -307,7 +308,7 @@ img,video{display:block;max-width:100%}
   var stage=$('#stage'), enter=$('#enter'), hintbar=$('#hintbar'), count=$('#count');
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var XLIM=HALF-42, ZMIN=mirrorZ+150, ZMAX=140;
-  var cam={x:0,y:0,z:FIRST+STEP*2,yaw:0,pitch:0}, vel={x:0,z:0}, keys={}, bobp=0, engaged=false;
+  var cam={x:0,y:-55,z:FIRST+STEP*2,yaw:0,pitch:0}, vel={x:0,z:0}, keys={}, bobp=0, engaged=false;
   var SPEED=8.6, TURN=2.1, LOOK=0.16, ACC=0.2, padMove=0, padTurn=0;
 
   function render(){
@@ -317,7 +318,7 @@ img,video{display:block;max-width:100%}
     world.style.transform='rotateZ('+roll.toFixed(3)+'deg) rotateX('+(-cam.pitch).toFixed(3)+'deg) rotateY('+(-cam.yaw).toFixed(3)+'deg) translate3d('+(-cam.x).toFixed(2)+'px,'+(-(cam.y+by)).toFixed(2)+'px,'+(-cam.z).toFixed(2)+'px)';
     var prog=Math.max(0,Math.min(100,Math.round((ZMAX-cam.z)/(ZMAX-ZMIN)*100)));
     count.innerHTML='<b>'+String(prog).padStart(2,'0')+'</b>% in';
-    if(!engaged && (Math.abs(cam.yaw)>3 || Math.abs(cam.pitch)>3 || sp>0.6)){
+    if(!engaged && (Math.abs(cam.yaw)>3 || Math.abs(cam.pitch)>3 || sp>0.6 || Math.abs(cam.x)>30 || Math.abs(cam.z-(FIRST+STEP*2))>30)){
       engaged=true; enter.classList.add('gone'); hintbar.style.opacity='0'; }
   }
   function tick(){
