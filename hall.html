@@ -175,20 +175,21 @@ img,video{display:block;max-width:100%}
   var $=function(s,r){return (r||document).querySelector(s);};
   // ---- exhibits. Drop files at assets/memes/*.jpg and the "user" ones appear automatically. ----
   var EX=[
-    {img:'assets/img/meme_king.png',      n:'No. I',   t:'KING OF THE LITTER', d:'oil on cardboard box · 2026 · the throne was always cash'},
-    {img:'assets/img/meme_trader.png',    n:'No. II',  t:'THE ANALYST',        d:'he does not read charts. he IS the chart.'},
-    {img:'assets/img/meme_moon.png',      n:'No. III', t:'ASCENSION',          d:'destination: unclear · vibes: immaculate'},
-    {img:'assets/img/meme_diamond.png',   n:'No. IV',  t:'DIAMOND PAWS',       d:'pried from the hands of the weak'},
-    {video:'assets/splash.mp4', wide:true, n:'No. V',  t:'THE ORIGIN TAPE',    d:'now showing · on loop · forever'},
-    {img:'assets/img/troll_challenger.png',n:'No. VI', t:'THE CHALLENGER',     d:'#1 loading... budge up, ser'},
-    {img:'assets/img/hero_scene.png', wide:false, n:'No. VII', t:'OLD MONEY',  d:'beige cat · green terminal · zero explanation'},
-    {img:'assets/img/mascot.png',         n:'No. VIII',t:'SELF-PORTRAIT',      d:'the grin that has ruined timelines since 2008'},
-    // ---- your uploads (missing files auto-hide) ----
-    {img:'assets/memes/tattoo-parlor.jpg', wide:true, user:1, n:'No. IX', t:'BUTT NEVER LIES', d:'troll ink · market manipulated · the tramp stamp of a free man'},
-    {img:'assets/memes/1.jpg', user:1, n:'No. X',  t:'COMMUNITY GRIN', d:'submitted by a certified troll'},
-    {img:'assets/memes/2.jpg', user:1, n:'No. XI', t:'COMMUNITY GRIN', d:'submitted by a certified troll'},
-    {img:'assets/memes/3.jpg', user:1, n:'No. XII',t:'COMMUNITY GRIN', d:'submitted by a certified troll'},
-    {img:'assets/memes/4.jpg', user:1, n:'No. XIII',t:'COMMUNITY GRIN', d:'submitted by a certified troll'},
+    {img:'assets/memes/face.jpg',         n:'No. I',    t:'THE ORIGINAL FACE', d:'self-portrait · undated · priceless'},
+    {img:'assets/memes/hoodie.jpg',       n:'No. II',   t:'ANON',              d:'the dev, allegedly. u mad bro?'},
+    {img:'assets/memes/gigatroll.jpg',    n:'No. III',  t:'GIGATROLL',         d:'built different · never skips troll day'},
+    {img:'assets/memes/problem.jpg',      n:'No. IV',   t:'PROBLEM?',          d:'he has a vape and a plan. mostly the vape.'},
+    {img:'assets/memes/my-turn.jpg',      n:'No. V',    t:'MY TURN',           d:'every cat gets one moment. this is his.'},
+    {video:'assets/splash.mp4', wide:true,n:'No. VI',   t:'THE ORIGIN TAPE',   d:'now showing · on loop · forever'},
+    {img:'assets/memes/green-tears.jpg',  n:'No. VII',  t:'TERMINAL GREEN',    d:'crying in the color of the candles'},
+    {img:'assets/memes/rises.jpg',        n:'No. VIII', t:'TROLLCAT RISES',    d:'he was down bad. then he wasn\'t.'},
+    {img:'assets/memes/cry-grin.jpg',     n:'No. IX',   t:'TEARS OF A TROLL',  d:'grinning and crying · the only two states'},
+    {img:'assets/memes/sad.jpg',          n:'No. X',    t:'DOWN 90%',          d:'still grinning under there somewhere'},
+    {img:'assets/memes/dump.jpg',         n:'No. XI',   t:'IT DUMPED',         d:'the face you make at 3:00am'},
+    {img:'assets/memes/pump.jpg',         n:'No. XII',  t:'IT PUMPED',         d:'the face you make at 3:01am'},
+    {img:'assets/memes/light-it-up.jpg',  n:'No. XIII', t:'LIGHT IT UP',       d:'lit the fuse on the Robinhood chain'},
+    {img:'assets/memes/the-incident.jpg', n:'No. XIV',  t:'THE INCIDENT',      d:'what happens in the litterbox stays in the litterbox'},
+    {img:'assets/memes/sign.jpg',         n:'No. XV',   t:'THE SIGN',          d:'hand-painted · still not financial advice'},
     {mirror:1}
   ];
   var rail=$('#rail'), outro=$('#outro');
@@ -214,7 +215,7 @@ img,video{display:block;max-width:100%}
         ? '<video class="art" src="'+e.video+'" autoplay muted loop playsinline preload="metadata"></video>'
         : '<img class="art" src="'+e.img+'" alt="'+e.t+'" loading="lazy" decoding="async">';
       el.innerHTML='<span class="spot"></span><div class="frame'+(e.wide?' wide':'')+'"><div class="mat">'+media+'</div></div>'+plate(e.n,e.t,e.d);
-      if(e.user && !e.video){ var im=el.querySelector('img.art'); im.addEventListener('error',function(){ el.remove(); relabel(); }); }
+      if(!e.video){ var im=el.querySelector('img.art'); im.addEventListener('error',function(){ el.remove(); relabel(); }); }
     }
     rail.insertBefore(el, outro);
   });
