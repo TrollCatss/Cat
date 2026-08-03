@@ -180,6 +180,9 @@ img,video{display:block;max-width:100%}
     {img:'assets/memes/gigatroll.jpg',    n:'No. III',  t:'GIGATROLL',         d:'built different · never skips troll day'},
     {img:'assets/memes/problem.jpg',      n:'No. IV',   t:'PROBLEM?',          d:'he has a vape and a plan. mostly the vape.'},
     {img:'assets/memes/my-turn.jpg',      n:'No. V',    t:'MY TURN',           d:'every cat gets one moment. this is his.'},
+    {video:'assets/memes/vid/v-crowd.mp4', poster:'assets/memes/vid/v-crowd.jpg', wide:true, n:'REEL I',  t:'THE GREEN SUIT', d:'walking through the wagies like they owe him money'},
+    {video:'assets/memes/vid/v-hoodie.mp4',poster:'assets/memes/vid/v-hoodie.jpg', n:'REEL II', t:'U MAD BRO?',     d:'crying in the hood · grinning in the void'},
+    {video:'assets/memes/vid/v-forest.mp4',poster:'assets/memes/vid/v-forest.jpg', n:'REEL III',t:'DOOMSCROLL',     d:'checking the chart in nature. nature is also red.'},
     {video:'assets/splash.mp4', wide:true,n:'No. VI',   t:'THE ORIGIN TAPE',   d:'now showing · on loop · forever'},
     {img:'assets/memes/green-tears.jpg',  n:'No. VII',  t:'TERMINAL GREEN',    d:'crying in the color of the candles'},
     {img:'assets/memes/rises.jpg',        n:'No. VIII', t:'TROLLCAT RISES',    d:'he was down bad. then he wasn\'t.'},
@@ -212,7 +215,7 @@ img,video{display:block;max-width:100%}
         plate('FINAL EXHIBIT','THE GREATEST TROLL OF ALL TIME','unveiled today · medium: you · not for sale');
     } else {
       var media = e.video
-        ? '<video class="art" src="'+e.video+'" autoplay muted loop playsinline preload="metadata"></video>'
+        ? '<video class="art" src="'+e.video+'"'+(e.poster?' poster="'+e.poster+'"':'')+' autoplay muted loop playsinline preload="metadata"></video>'
         : '<img class="art" src="'+e.img+'" alt="'+e.t+'" loading="lazy" decoding="async">';
       el.innerHTML='<span class="spot"></span><div class="frame'+(e.wide?' wide':'')+'"><div class="mat">'+media+'</div></div>'+plate(e.n,e.t,e.d);
       if(!e.video){ var im=el.querySelector('img.art'); im.addEventListener('error',function(){ el.remove(); relabel(); }); }
