@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TROLLCAT &mdash; Live Chart &amp; Contract</title>
+<meta name="description" content="$TROLLCAT on Robinhood Chain — live CoinGecko/GeckoTerminal chart, contract address, and how to trade. u back bro?">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<meta name="theme-color" content="#0a0d0b">
+<meta property="og:title" content="TROLLCAT &mdash; Live Chart &amp; Contract">
+<meta property="og:description" content="Live chart + contract address for $TROLLCAT on Robinhood Chain.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://trollcat.life/chart">
+<meta property="og:image" content="https://trollcat.life/assets/og.jpg">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="864">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://trollcat.life/assets/og.jpg">
+<style>
+:root{
+  --night:#090c0a;--panel:#111710;--panel2:#161d13;
+  --bone:#eef2e6;--fog:#93a089;--faint:#59654f;
+  --tox:#b6ff2e;--tox2:#84c11c;--gold:#ffcf47;--tear:#bfeaff;
+  --up:#59e08a;--down:#ff5a4d;--edge:#233019;--edge2:#33471f;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --disp:"Archivo Black","Arial Black",Impact,var(--sans);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(120% 80% at 50% -10%, #10160e 0%, var(--night) 60%);
+  color:var(--bone);font-family:var(--sans);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+img{display:block;max-width:100%}
+a{color:var(--tox2);text-decoration:none}a:hover{color:var(--tox)}
+button{font-family:var(--mono);cursor:pointer;color:inherit;background:none;border:none}
+::selection{background:var(--tox);color:#0a0a0a}
+:focus-visible{outline:2px solid var(--tox);outline-offset:2px}
+.scan{position:fixed;inset:0;z-index:60;pointer-events:none;background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.16) 2px 3px);mix-blend-mode:multiply;opacity:.5}
+.vig{position:fixed;inset:0;z-index:59;pointer-events:none;box-shadow:inset 0 0 220px 40px rgba(0,0,0,.7)}
+.wrap{max-width:1000px;margin:0 auto;padding:clamp(1rem,3vw,2rem)}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:var(--mono);font-size:.72rem;color:var(--faint);letter-spacing:.08em;border-bottom:1px solid var(--edge);padding-bottom:.9rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.top .l{display:flex;align-items:center;gap:.6rem}.top .l b{color:var(--bone)}
+.top nav{display:flex;gap:1rem;flex-wrap:wrap}
+
+.hero{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;margin-bottom:1.3rem}
+.hero img{width:clamp(84px,14vw,120px);height:auto;filter:drop-shadow(0 12px 14px rgba(0,0,0,.55))}
+.hero .tt{flex:1;min-width:220px}
+.badge{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tox);border:1px solid var(--edge2);padding:.32rem .65rem;margin-bottom:.7rem}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--tox);box-shadow:0 0 8px var(--tox);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.25}}
+h1{font-family:var(--disp);font-size:clamp(2rem,7vw,3.4rem);line-height:.9;text-transform:uppercase;letter-spacing:.01em;filter:url(#gr)}
+h1 .b{color:var(--tox)}
+.hero .sub{font-family:var(--mono);color:var(--fog);font-size:.82rem;letter-spacing:.04em;margin-top:.6rem}
+
+/* CA block */
+.ca{border:1px solid var(--edge2);background:linear-gradient(180deg,var(--panel),#0a0d0a);padding:1rem 1.1rem;margin-bottom:1.2rem}
+.ca .lab{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:.55rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.ca .lab .net{color:var(--tox2)}
+.ca .row{display:flex;align-items:stretch;gap:.6rem;flex-wrap:wrap}
+.ca .addr{flex:1;min-width:0;font-family:var(--mono);font-size:clamp(.72rem,2.3vw,.95rem);color:var(--bone);background:#0b0f0a;border:1px solid var(--edge);padding:.7rem .8rem;overflow-x:auto;white-space:nowrap;display:flex;align-items:center}
+.ca .copy{flex:none;background:var(--tox);color:#0a0d06;font-family:var(--disp);text-transform:uppercase;letter-spacing:.03em;font-size:.82rem;padding:0 1.1rem;border:none;transition:transform .1s,background .2s;display:flex;align-items:center;gap:.4rem}
+.ca .copy:hover{transform:translateY(-1px)}
+.ca .copy.done{background:var(--up)}
+.ca .links{margin-top:.7rem;font-family:var(--mono);font-size:.7rem;color:var(--faint);display:flex;gap:1.1rem;flex-wrap:wrap}
+
+/* chart */
+.chartwrap{border:1px solid var(--edge2);background:#0b0f0a;position:relative;overflow:hidden;margin-bottom:.5rem}
+.chartwrap iframe{display:block;width:100%;height:min(72vh,640px);border:0;background:#0b0f0a}
+.chartcap{font-family:var(--mono);font-size:.66rem;color:var(--faint);letter-spacing:.05em;margin-bottom:1.3rem;text-align:right}
+.chartcap b{color:var(--fog)}
+
+/* CTAs */
+.ctas{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1.4rem}
+@media(max-width:620px){.ctas{grid-template-columns:1fr}}
+.cta{border:1px solid var(--edge2);background:#0d120b;padding:.9rem 1rem;text-align:center;transition:border-color .2s,background .2s;display:block}
+.cta:hover{border-color:var(--tox2);background:rgba(182,255,46,.06)}
+.cta .h{font-family:var(--disp);text-transform:uppercase;font-size:.9rem;color:var(--bone);letter-spacing:.02em}
+.cta.buy .h{color:var(--tox)}
+.cta .d{font-family:var(--mono);font-size:.66rem;color:var(--fog);margin-top:.2rem}
+
+/* facts */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1.4rem}
+@media(max-width:620px){.facts{grid-template-columns:1fr 1fr}}
+.fact{border:1px solid var(--edge);background:#0c110a;padding:.7rem .8rem}
+.fact .k{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.fact .v{font-family:var(--mono);font-weight:700;color:var(--bone);margin-top:.25rem;font-size:.9rem}
+
+.note{font-family:var(--mono);font-size:.68rem;color:var(--faint);letter-spacing:.04em;line-height:1.8}
+.note b{color:var(--fog)}
+footer{border-top:1px solid var(--edge);margin-top:2rem;padding-top:1.1rem;font-family:var(--mono);font-size:.7rem;color:var(--faint)}
+footer a{color:var(--tox2)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#0b0f0a;border:1px solid var(--tox2);color:var(--tox);font-family:var(--mono);font-size:.8rem;padding:.6rem 1rem;opacity:0;transition:opacity .2s,transform .2s;z-index:200;pointer-events:none}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="gr"><feTurbulence type="fractalNoise" baseFrequency="0.9 0.02" numOctaves="1" seed="4" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="3"/></filter>
+</svg>
+<div class="scan"></div><div class="vig"></div>
+
+<div class="wrap">
+  <div class="top">
+    <div class="l">&#128200; <b>TROLLCAT</b> <span>/ chart</span></div>
+    <nav>
+      <a href="/">world</a><a href="/litterbox.html">litterbox</a><a href="/docs">docs</a>
+    </nav>
+  </div>
+
+  <div class="hero">
+    <img src="/assets/trollcat.png" alt="TROLLCAT">
+    <div class="tt">
+      <span class="badge"><span class="dot"></span>Live on Robinhood Chain</span>
+      <h1>$TROLL<span class="b">CAT</span></h1>
+      <p class="sub">live chart &amp; contract &mdash; chart data via GeckoTerminal (CoinGecko on-chain).</p>
+    </div>
+  </div>
+
+  <div class="ca">
+    <div class="lab"><span>Contract Address</span><span class="net">Robinhood Chain &middot; 4663</span></div>
+    <div class="row">
+      <div class="addr" id="ca">0x4646Dcf7db9C8108bBe7C4C5075F76E529a70721</div>
+      <button class="copy" id="copy" aria-label="copy contract address">&#128203; Copy</button>
+    </div>
+    <div class="links">
+      <a href="https://robinhoodchain.blockscout.com/token/0x4646Dcf7db9C8108bBe7C4C5075F76E529a70721" target="_blank" rel="noopener">Verify on explorer &#8599;</a>
+      <a href="https://www.geckoterminal.com/robinhood/pools/0x9585700cbf83ac2457e7aa4798b604637d9719e0" target="_blank" rel="noopener">Open on GeckoTerminal &#8599;</a>
+      <span>always DYOR &mdash; it's a meme</span>
+    </div>
+  </div>
+
+  <div class="chartwrap">
+    <iframe title="TROLLCAT live price chart" src="https://www.geckoterminal.com/robinhood/pools/0x9585700cbf83ac2457e7aa4798b604637d9719e0?embed=1&info=1&swaps=1&grayscale=0&light_chart=0" allow="clipboard-write" loading="lazy"></iframe>
+  </div>
+  <div class="chartcap">chart &amp; trades via <b>GeckoTerminal</b> (a CoinGecko company) &middot; pair TROLLCAT/WETH</div>
+
+  <div class="ctas">
+    <a class="cta buy" href="https://www.geckoterminal.com/robinhood/pools/0x9585700cbf83ac2457e7aa4798b604637d9719e0" target="_blank" rel="noopener"><div class="h">&#128176; Trade</div><div class="d">swap on the DEX pool</div></a>
+    <a class="cta" href="/litterbox.html"><div class="h">&#129529; Litterbox</div><div class="d">live chain rankings</div></a>
+    <a class="cta" href="https://robinhoodchain.blockscout.com/token/0x4646Dcf7db9C8108bBe7C4C5075F76E529a70721" target="_blank" rel="noopener"><div class="h">&#128269; Verify</div><div class="d">contract on explorer</div></a>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><div class="k">Ticker</div><div class="v">$TROLLCAT</div></div>
+    <div class="fact"><div class="k">Chain</div><div class="v">Robinhood</div></div>
+    <div class="fact"><div class="k">Supply</div><div class="v">1,000,000,000</div></div>
+    <div class="fact"><div class="k">Pair</div><div class="v">TROLLCAT / WETH</div></div>
+  </div>
+
+  <p class="note"><b>// live chart</b> streams from the on-chain TROLLCAT/WETH pool via GeckoTerminal (CoinGecko's on-chain terminal) &mdash; CoinGecko's main site won't list a brand-new token yet, so this is the real-time source. Price, market cap, liquidity &amp; trades update live in the widget above. $TROLLCAT is a meme coin for entertainment; nothing here is financial advice. Verify the contract yourself before trading.</p>
+
+  <footer>&#128169; <b style="color:var(--fog)">$TROLLCAT</b> &middot; <a href="/">TROLLCAT WORLD</a> &middot; <a href="/litterbox.html">Litterbox</a> &middot; <a href="/docs">Docs</a></footer>
+</div>
+
+<div id="toast">contract address copied &#10003;</div>
+
+<script>
+(function(){
+  var ca="0x4646Dcf7db9C8108bBe7C4C5075F76E529a70721";
+  var btn=document.getElementById('copy'), toast=document.getElementById('toast'), tT;
+  function ok(){ btn.classList.add('done'); btn.innerHTML='&#10003; Copied';
+    toast.classList.add('on'); clearTimeout(tT); tT=setTimeout(function(){ toast.classList.remove('on'); btn.classList.remove('done'); btn.innerHTML='&#128203; Copy'; }, 1900); }
+  function copy(){
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(ca).then(ok, sel); }
+    else sel();
+  }
+  function sel(){ try{ var r=document.createRange(); r.selectNode(document.getElementById('ca'));
+    var s=window.getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand('copy'); s.removeAllRanges(); ok(); }catch(e){} }
+  btn.addEventListener('click', copy);
+  document.getElementById('ca').addEventListener('click', copy);
+})();
+</script>
+</body>
+</html>
