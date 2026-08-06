@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TROLLCAT &mdash; Official Documentation (Litepaper v1.0)</title>
+<meta name="description" content="Institutional-grade 37-page whitepaper for $TROLLCAT on Robinhood Chain. Peer-reviewed. Audited. (it is a cat that shits in a box.)">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<meta name="theme-color" content="#0a0d0b">
+<meta property="og:title" content="TROLLCAT &mdash; Official Documentation">
+<meta property="og:description" content="The full 37-page institutional litepaper. Tokenomics, roadmap, security audit. (spoiler: it's a cat.)">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://trollcat.life/docs">
+<meta property="og:image" content="https://trollcat.life/assets/og.jpg">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="864">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://trollcat.life/assets/og.jpg">
+<style>
+:root{
+  --night:#090c0a;--panel:#111710;--panel2:#161d13;
+  --bone:#eef2e6;--fog:#93a089;--faint:#59654f;
+  --tox:#b6ff2e;--tox2:#84c11c;--gold:#ffcf47;--tear:#bfeaff;
+  --up:#59e08a;--down:#ff5a4d;--edge:#233019;--edge2:#33471f;
+  --mono:ui-monospace,"SF Mono","Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --disp:"Archivo Black","Arial Black",Impact,var(--sans);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(120% 80% at 50% -10%, #10160e 0%, var(--night) 60%);
+  color:var(--bone);font-family:var(--sans);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+img{display:block;max-width:100%}
+a{color:var(--tox2);text-decoration:none}
+a:hover{color:var(--tox)}
+button{font-family:var(--mono);cursor:pointer;color:inherit;background:none;border:none}
+::selection{background:var(--tox);color:#0a0a0a}
+:focus-visible{outline:2px solid var(--tox);outline-offset:2px}
+.scan{position:fixed;inset:0;z-index:60;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,rgba(0,0,0,0) 0 2px,rgba(0,0,0,.16) 2px 3px);mix-blend-mode:multiply;opacity:.5}
+.vig{position:fixed;inset:0;z-index:59;pointer-events:none;box-shadow:inset 0 0 220px 40px rgba(0,0,0,.7)}
+.wrap{max-width:860px;margin:0 auto;padding:clamp(1rem,3vw,2rem)}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:1rem;font-family:var(--mono);font-size:.72rem;
+  color:var(--faint);letter-spacing:.08em;border-bottom:1px solid var(--edge);padding-bottom:.9rem;margin-bottom:1.6rem;flex-wrap:wrap}
+.top .l{display:flex;align-items:center;gap:.6rem}
+.top .l b{color:var(--bone)}
+.top nav{display:flex;gap:1rem;flex-wrap:wrap}
+
+/* boot terminal */
+.term{border:1px solid var(--edge2);background:#0b0f0a;font-family:var(--mono);font-size:.8rem;line-height:1.9;
+  padding:1rem 1.1rem;margin-bottom:2rem;box-shadow:0 20px 50px -24px #000;white-space:pre-wrap;min-height:12.6em}
+.term .g{color:var(--tox)}.term .d{color:var(--down)}.term .f{color:var(--faint)}
+.term .cur{display:inline-block;width:.6ch;background:var(--tox);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* hero */
+.badge{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--tox);border:1px solid var(--edge2);padding:.35rem .7rem;margin-bottom:1.1rem}
+.badge .dot{width:7px;height:7px;border-radius:50%;background:var(--tox);box-shadow:0 0 8px var(--tox);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.25}}
+h1.title{font-family:var(--disp);font-size:clamp(2.2rem,8vw,4.4rem);line-height:.9;text-transform:uppercase;letter-spacing:.01em;filter:url(#gr)}
+h1.title .b{color:var(--tox)}
+.meta{font-family:var(--mono);color:var(--fog);font-size:.78rem;letter-spacing:.05em;margin-top:.9rem}
+.lede{font-size:1.05rem;color:var(--bone);margin-top:1.2rem;max-width:60ch}
+.lede b{color:var(--tox)}
+
+/* watermark stamp */
+.stamp{position:fixed;right:-2%;top:16%;transform:rotate(14deg);font-family:var(--disp);font-size:clamp(2rem,7vw,4.5rem);
+  color:rgba(182,255,46,.05);border:6px solid rgba(182,255,46,.05);padding:.2em .4em;letter-spacing:.06em;z-index:0;pointer-events:none;text-transform:uppercase}
+
+/* TOC */
+.toc{border:1px solid var(--edge2);background:linear-gradient(180deg,var(--panel),#0a0d0a);margin:2rem 0;padding:1.1rem 1.3rem}
+.toc h4{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:.8rem}
+.toc ol{list-style:none;counter-reset:t;display:grid;grid-template-columns:1fr 1fr;gap:.35rem .9rem}
+@media(max-width:560px){.toc ol{grid-template-columns:1fr}}
+.toc li{counter-increment:t;font-family:var(--mono);font-size:.86rem;border-bottom:1px dashed var(--edge);padding:.35rem 0}
+.toc li::before{content:counter(t,decimal-leading-zero) " ";color:var(--tox2);margin-right:.5rem}
+.toc li a{color:var(--bone)}.toc li a:hover{color:var(--tox)}
+.toc .pg{float:right;color:var(--faint)}
+
+/* sections */
+section{position:relative;z-index:1;margin:2.6rem 0;scroll-margin-top:1rem}
+.sh{display:flex;align-items:baseline;gap:.7rem;border-bottom:1px solid var(--edge2);padding-bottom:.5rem;margin-bottom:1rem}
+.sh .no{font-family:var(--mono);color:var(--tox2);font-size:.8rem}
+.sh h2{font-family:var(--disp);text-transform:uppercase;font-size:clamp(1.2rem,3.6vw,1.7rem);letter-spacing:.02em}
+p{margin:.7rem 0;color:#d8e0cf}
+p b{color:var(--bone)}
+.mut{color:var(--fog)}
+.small{font-family:var(--mono);font-size:.72rem;color:var(--faint);letter-spacing:.03em}
+
+/* tokenomics */
+.tok{display:grid;grid-template-columns:200px 1fr;gap:1.4rem;align-items:center}
+@media(max-width:560px){.tok{grid-template-columns:1fr;justify-items:center}}
+.pie{width:180px;height:180px;border-radius:50%;position:relative;
+  background:conic-gradient(var(--tox) 0 99.6%, var(--down) 99.6% 100%);
+  box-shadow:0 0 0 6px #0e1309,0 18px 40px -18px #000}
+.pie::after{content:"100%";position:absolute;inset:26%;border-radius:50%;background:#0b0f0a;border:1px solid var(--edge2);
+  display:flex;align-items:center;justify-content:center;font-family:var(--disp);color:var(--tox);font-size:1.2rem}
+.pie .lg{position:absolute;left:50%;bottom:-2.3rem;transform:translateX(-50%);white-space:nowrap;font-family:var(--mono);font-size:.7rem;color:var(--fog)}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.84rem}
+td{padding:.5rem .3rem;border-bottom:1px solid var(--edge)}
+td:first-child{color:var(--fog)}td:last-child{color:var(--bone);text-align:right;font-weight:700}
+
+/* roadmap */
+.road{display:grid;gap:.6rem}
+.ph{display:grid;grid-template-columns:auto 1fr auto;gap:.9rem;align-items:center;border:1px solid var(--edge2);padding:.7rem .9rem;background:#0d120b}
+.ph .n{font-family:var(--disp);color:var(--tox2);font-size:.9rem}
+.ph .t{font-family:var(--mono);font-size:.9rem;color:var(--bone)}
+.ph .s{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .5rem;border:1px solid var(--edge2);color:var(--fog)}
+.ph.done .s{color:var(--tox);border-color:var(--tox2)}
+.ph.now .s{color:var(--gold);border-color:#8a6a12}
+
+/* architecture flow */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;justify-content:center;font-family:var(--mono);font-size:.8rem;
+  border:1px dashed var(--edge2);padding:1.2rem;background:#0b0f0a;text-align:center}
+.node{border:1px solid var(--edge2);padding:.5rem .7rem;color:var(--bone);background:#12180d}
+.node.hot{border-color:var(--tox2);color:var(--tox)}
+.arw{color:var(--tox2)}
+
+/* audit stamp */
+.audit{display:flex;align-items:center;gap:1.3rem;border:1px solid var(--edge2);padding:1.1rem 1.2rem;background:#0d120b;flex-wrap:wrap}
+.passed{font-family:var(--disp);color:var(--tox);border:4px solid var(--tox2);border-radius:8px;padding:.35em .7em;
+  transform:rotate(-6deg);font-size:1.5rem;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 0 22px rgba(182,255,46,.18) inset}
+.audit .body{flex:1;min-width:220px}
+
+/* team */
+.team{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+@media(max-width:560px){.team{grid-template-columns:1fr}}
+.mate{border:1px solid var(--edge2);background:#0d120b;padding:1rem;text-align:center}
+.mate img{width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:center top;margin:0 auto .6rem;border:2px solid var(--edge2);background:#0a0d0a}
+.mate .nm{font-family:var(--mono);font-weight:700;font-size:.86rem;color:var(--bone)}
+.mate .ro{font-family:var(--mono);font-size:.68rem;color:var(--fog);margin-top:.2rem}
+
+/* faq */
+.faq{border-top:1px solid var(--edge)}
+.qa{border-bottom:1px solid var(--edge);padding:.85rem 0}
+.qa .q{font-family:var(--mono);font-weight:700;color:var(--bone);cursor:pointer;display:flex;justify-content:space-between;gap:1rem}
+.qa .q::after{content:"+";color:var(--tox2)}
+.qa.open .q::after{content:"\2212"}
+.qa .a{color:var(--fog);font-family:var(--mono);font-size:.86rem;max-height:0;overflow:hidden;transition:max-height .25s;}
+.qa.open .a{max-height:12em;margin-top:.5rem}
+
+/* download CTA */
+.cta{margin:2.6rem 0;text-align:center;border:1px solid var(--edge2);background:linear-gradient(180deg,#12180d,#0a0d0a);padding:1.8rem 1rem}
+.cta p{color:var(--fog);font-family:var(--mono);font-size:.8rem}
+.dl{margin-top:1rem;display:inline-flex;align-items:center;gap:.6rem;background:var(--tox);color:#0a0d06;font-family:var(--disp);
+  text-transform:uppercase;letter-spacing:.03em;font-size:1rem;padding:.85rem 1.4rem;border:none;box-shadow:0 10px 26px -10px rgba(182,255,46,.5);transition:transform .12s}
+.dl:hover{transform:translateY(-2px)}
+.dl:active{transform:translateY(0)}
+.dlsz{font-family:var(--mono);font-size:.66rem;color:var(--faint);margin-top:.6rem;letter-spacing:.06em}
+
+/* footer */
+footer{border-top:1px solid var(--edge);margin-top:3rem;padding-top:1.2rem;font-family:var(--mono);font-size:.7rem;color:var(--faint);line-height:1.9}
+footer a{color:var(--tox2)}
+
+/* GOTCHA overlay */
+#gotcha{position:fixed;inset:0;z-index:300;background:rgba(6,9,7,.94);display:none;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:1.5rem;overflow:hidden}
+#gotcha.on{display:flex}
+#gotcha img{width:min(230px,52vw);filter:drop-shadow(0 20px 30px rgba(0,0,0,.6));animation:gwob .8s ease-in-out infinite}
+@keyframes gwob{50%{transform:translateY(-8px) rotate(-2deg)}}
+#gotcha h3{font-family:var(--disp);text-transform:uppercase;font-size:clamp(2rem,9vw,4rem);color:var(--tox);margin-top:.6rem;filter:url(#gr)}
+#gotcha p{max-width:44ch;color:var(--bone);font-family:var(--mono);font-size:.9rem}
+#gotcha .x{margin-top:1.3rem;border:1px solid var(--tox2);color:var(--tox);font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;padding:.6rem 1.1rem}
+.pp{position:fixed;top:-8%;font-size:2rem;z-index:301;pointer-events:none;will-change:transform}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="gr"><feTurbulence type="fractalNoise" baseFrequency="0.9 0.02" numOctaves="1" seed="4" result="t"/>
+  <feDisplacementMap in="SourceGraphic" in2="t" scale="3"/></filter>
+</svg>
+<div class="scan"></div><div class="vig"></div>
+<div class="stamp">Peer&nbsp;Reviewed</div>
+
+<div class="wrap">
+  <div class="top">
+    <div class="l">&#128169; <b>TROLLCAT</b> <span>/ docs</span></div>
+    <nav>
+      <a href="/">&larr; world</a>
+      <a href="/litterbox">litterbox</a>
+      <a href="#tok">tokenomics</a>
+      <a href="#faq">faq</a>
+    </nav>
+  </div>
+
+  <div class="term" id="term" aria-label="loading the whitepaper"></div>
+
+  <span class="badge"><span class="dot"></span>Official Documentation &middot; verified*</span>
+  <h1 class="title">TROLLCAT<br><span class="b">LITEPAPER</span></h1>
+  <p class="meta">v1.0 &nbsp;&middot;&nbsp; last updated: <b>never</b> &nbsp;&middot;&nbsp; 37 pages &nbsp;&middot;&nbsp; chain: Robinhood &nbsp;&middot;&nbsp; peer-reviewed by the cat</p>
+  <p class="lede">You clicked <b>Docs</b> on a memecoin. Genuine respect. Below is the complete institutional-grade documentation for $TROLLCAT &mdash; every mechanism, every allocation, the full roadmap. It contains <b>zero (0)</b> useful information. Enjoy.</p>
+
+  <div class="toc">
+    <h4>Table of Contents</h4>
+    <ol>
+      <li><a href="#abs">Abstract</a><span class="pg">p.1</span></li>
+      <li><a href="#tok">Tokenomics</a><span class="pg">p.4</span></li>
+      <li><a href="#road">Roadmap</a><span class="pg">p.9</span></li>
+      <li><a href="#arch">Architecture</a><span class="pg">p.14</span></li>
+      <li><a href="#audit">Security Audit</a><span class="pg">p.21</span></li>
+      <li><a href="#team">The Team</a><span class="pg">p.28</span></li>
+      <li><a href="#faq">FAQ</a><span class="pg">p.33</span></li>
+      <li><a href="#dl">Appendix: the truth</a><span class="pg">p.37</span></li>
+    </ol>
+  </div>
+
+  <section id="abs">
+    <div class="sh"><span class="no">01</span><h2>Abstract</h2></div>
+    <p>$TROLLCAT is a decentralized, community-governed <b>cat</b>. It is deployed on Robinhood Chain for its industry-leading throughput of <b>memes-per-second (MPS)</b>. The protocol solves no problem. There was no problem. The cat was bored.</p>
+    <p>This paper introduces <b>Proof-of-Shit</b>, a novel consensus mechanism in which network finality is achieved when the cat relieves himself in a communal litterbox. The remainder of this document has been rigorously formatted to ensure the "Docs" button is not empty. The only alpha herein is: <b>buy, then do not sell.</b> That is the litepaper. Thank you for your diligence.</p>
+  </section>
+
+  <section id="tok">
+    <div class="sh"><span class="no">02</span><h2>Tokenomics</h2></div>
+    <div class="tok">
+      <div style="position:relative"><div class="pie"></div><div class="lg">100% vibes &nbsp;|&nbsp; 0.4% rug*</div></div>
+      <table>
+        <tr><td>Total supply</td><td>a lot</td></tr>
+        <tr><td>Circulating</td><td>yes</td></tr>
+        <tr><td>Team allocation</td><td>the cat ate it</td></tr>
+        <tr><td>Transaction tax</td><td>0%**</td></tr>
+        <tr><td>Liquidity</td><td>locked in the box &#128274;</td></tr>
+        <tr><td>Burn mechanism</td><td>the cat buries it</td></tr>
+      </table>
+    </div>
+    <p class="small">* allocated to rug. never used. probably. &nbsp; ** emotional damage not included and non-refundable.</p>
+  </section>
+
+  <section id="road">
+    <div class="sh"><span class="no">03</span><h2>Roadmap</h2></div>
+    <div class="road">
+      <div class="ph done"><span class="n">P1</span><span class="t">Exist. Be a cat. Get listed on Robinhood Chain.</span><span class="s">Shipped</span></div>
+      <div class="ph done"><span class="n">P2</span><span class="t">Shit in the box. Rank the other coins. Cry.</span><span class="s">Shipped</span></div>
+      <div class="ph now"><span class="n">P3</span><span class="t">???</span><span class="s">In progress</span></div>
+      <div class="ph"><span class="n">P4</span><span class="t">Litter Valhalla. Number go up. The cat rests.</span><span class="s">Soon&#8482;</span></div>
+    </div>
+    <p class="small">Internal strategy (do not leak): &nbsp; Phase 1: buy &nbsp;&rarr;&nbsp; Phase 2: ??? &nbsp;&rarr;&nbsp; Phase 3: profit.</p>
+  </section>
+
+  <section id="arch">
+    <div class="sh"><span class="no">04</span><h2>Architecture &mdash; Proof-of-Shit</h2></div>
+    <div class="flow">
+      <span class="node">YOU</span><span class="arw">&rarr;</span>
+      <span class="node hot">BUY</span><span class="arw">&rarr;</span>
+      <span class="node">TROLLCAT</span><span class="arw">&rarr;</span>
+      <span class="node hot">&#128169; SHIT</span><span class="arw">&rarr;</span>
+      <span class="node">LITTERBOX</span><span class="arw">&rarr;</span>
+      <span class="node">NUMBER GO UP?</span><span class="arw">&rarr;</span>
+      <span class="node">YOU (again)</span>
+    </div>
+    <p>Consensus is reached the moment the cat shits. <b>Block time</b> = whenever he feels like it. <b>Finality</b> = never; he is a cat and may revisit the box. The network is secured by <b>256-bit litter</b> and the validators (one cat) are economically incentivized by treats.</p>
+  </section>
+
+  <section id="audit">
+    <div class="sh"><span class="no">05</span><h2>Security Audit</h2></div>
+    <div class="audit">
+      <div class="passed">Passed</div>
+      <div class="body">
+        <p style="margin:0"><b>Auditor:</b> the cat. &nbsp; <b>Methodology:</b> the cat looked at it.</p>
+        <p style="margin:.3rem 0 0"><b>Findings:</b> 0 critical, 0 high, 1 hairball (acknowledged). &nbsp;<b>Verdict:</b> the cat cannot read, therefore nothing was found. Airtight.</p>
+      </div>
+    </div>
+    <p class="small">For a second opinion, the on-chain <a href="/litterbox">Litterbox</a> runs a live GoPlus safety check &mdash; one of the two auditors can actually read.</p>
+  </section>
+
+  <section id="team">
+    <div class="sh"><span class="no">06</span><h2>The Team</h2></div>
+    <div class="team">
+      <div class="mate"><img src="/assets/trollcat.png" alt=""><div class="nm">Anon #1</div><div class="ro">Chief Litter Officer</div></div>
+      <div class="mate"><img src="/assets/trollcat.png" alt=""><div class="nm">the cat</div><div class="ro">CEO / crying</div></div>
+      <div class="mate"><img src="/assets/trollcat.png" alt=""><div class="nm">Anon #2</div><div class="ro">Head of Shitting</div></div>
+    </div>
+    <p class="small">Doxxed: no. &nbsp; KYC: the cat blinked, close enough. &nbsp; Rug risk: the cat says no &#128049;. &nbsp; Can you trust a crying cat: that part's on you.</p>
+  </section>
+
+  <section id="faq">
+    <div class="sh"><span class="no">07</span><h2>FAQ</h2></div>
+    <div class="faq" id="faqlist">
+      <div class="qa"><div class="q">Is this financial advice?</div><div class="a">No. It's a cat.</div></div>
+      <div class="qa"><div class="q">Did you seriously click "Docs"?</div><div class="a">Yes. We saw. It's logged forever. The cat is proud of you.</div></div>
+      <div class="qa"><div class="q">Am I early?</div><div class="a">If you're asking, yes. If you're selling, no.</div></div>
+      <div class="qa"><div class="q">wen moon?</div><div class="a">The cat is thinking about it. Do not rush the cat.</div></div>
+      <div class="qa"><div class="q">wen utility?</div><div class="a">The utility is the cat. You already have it. You're welcome.</div></div>
+      <div class="qa"><div class="q">Is it safe?</div><div class="a">GoPlus and the cat both say it's fine. One of them can read. Always DYOR &mdash; it's a meme.</div></div>
+    </div>
+  </section>
+
+  <div class="cta" id="dl">
+    <p>Ready for the complete, unabridged, peer-reviewed litepaper?</p>
+    <button class="dl" id="dlbtn">&#11015; Download full litepaper</button>
+    <div class="dlsz">PDF &middot; 37 pages &middot; 4.2&nbsp;MB &middot; no email required</div>
+  </div>
+
+  <footer>
+    <b style="color:var(--fog)">$TROLLCAT</b> is a meme coin on Robinhood Chain. This "documentation" is satire &mdash; not real docs, not 37 pages, not financial advice, and definitely not a PDF. Nothing here is an offer, a promise, or a roadmap anyone intends to follow. Always do your own research. &copy; the cat, forever. &nbsp; <a href="/">&larr; back to TROLLCAT WORLD</a>
+  </footer>
+</div>
+
+<div id="gotcha" role="dialog" aria-label="gotcha">
+  <img src="/assets/trollcat.png" alt="TROLLCAT">
+  <h3>Gotcha</h3>
+  <p>there is no PDF. there was never a PDF. you clicked "Download" on a memecoin's fake docs. iconic. now go buy <b style="color:var(--tox)">$TROLLCAT</b> &mdash; or don't, the cat is crying either way.</p>
+  <button class="x" id="gclose">close (ngmi)</button>
+</div>
+
+<script>
+(function(){
+  // ---- boot terminal ----
+  var lines=[
+    ["> trollcat-docs --open","f"],
+    ["> authenticating institutional access... ok","g"],
+    ["> fetching whitepaper (37 pages)...","f"],
+    ["> decrypting tokenomics [########..] 84%","f"],
+    ["> ERROR: whitepaper.pdf not found","d"],
+    ["> loading fallback: the_truth.txt","f"],
+    ["> it is a cat. it shits in a box. you are early.","g"],
+    ["> (or you are not. the cat won't say.)","f"]
+  ];
+  var el=document.getElementById('term'); var li=0, ci=0, html="";
+  function tick(){
+    if(li>=lines.length){ el.innerHTML=html+'<span class="cur">&nbsp;</span>'; return; }
+    var txt=lines[li][0], cls=lines[li][1];
+    if(ci===0) html+='<span class="'+cls+'">';
+    var ch=txt.charAt(ci); if(ch==='<')ch='&lt;';
+    el.innerHTML=html+ch+'</span><span class="cur">&nbsp;</span>';
+    html+=ch; ci++;
+    if(ci>=txt.length){ html+='</span>\n'; li++; ci=0; setTimeout(tick, 260); }
+    else setTimeout(tick, 16+Math.random()*26);
+  }
+  tick();
+
+  // ---- FAQ accordion ----
+  [].forEach.call(document.querySelectorAll('#faqlist .qa'),function(qa){
+    qa.querySelector('.q').addEventListener('click',function(){ qa.classList.toggle('open'); });
+  });
+
+  // ---- GOTCHA download ----
+  var g=document.getElementById('gotcha'), rain=null;
+  function poopRain(){
+    for(var i=0;i<26;i++){ (function(k){
+      var d=document.createElement('div'); d.className='pp'; d.textContent=String.fromCodePoint(0x1F4A9);
+      d.style.left=(Math.random()*100)+'vw'; d.style.fontSize=(1.2+Math.random()*2.2)+'rem';
+      var dur=2.4+Math.random()*2.6, delay=Math.random()*1.2;
+      d.style.transition='transform '+dur+'s linear '+delay+'s, opacity .4s';
+      document.body.appendChild(d);
+      requestAnimationFrame(function(){ d.style.transform='translateY(112vh) rotate('+(Math.random()*720-360)+'deg)'; });
+      setTimeout(function(){ d.remove(); }, (dur+delay)*1000+200);
+    })(i); }
+  }
+  document.getElementById('dlbtn').addEventListener('click',function(){
+    g.classList.add('on'); poopRain(); rain=setInterval(poopRain, 2600);
+  });
+  function close(){ g.classList.remove('on'); if(rain){ clearInterval(rain); rain=null; } }
+  document.getElementById('gclose').addEventListener('click',close);
+  g.addEventListener('click',function(e){ if(e.target===g) close(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+})();
+</script>
+</body>
+</html>
